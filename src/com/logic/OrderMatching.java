@@ -7,42 +7,42 @@ import java.util.Date;
 import java.util.List;
 
 import com.crud.InProgressDAO;
+import com.crud.MarketCRUD;
 import com.crud.UserHistoryDAO;
 import com.trade.InProgress;
+import com.trade.ShareInfo;
 import com.trade.UserHistory;
-
-
 
 public class OrderMatching {
 	public boolean processOrder(InProgress inProgress) {
 		PrioriryList prioriryList=new PrioriryList();
-		
+
 		InProgressDAO inProgressDAO=new InProgressDAO();
 		inProgressDAO.addOrUpdate(inProgress);
-		
-		
+
+
 		// limit order
 		List<InProgress> orderList=null;
 		if(inProgress.getDirection().equals("buy")) {
 			orderList = prioriryList.sell(inProgress.getSecurityName());
-			
+
 		}else {
-			 orderList = prioriryList.buy(inProgress.getSecurityName());
+			orderList = prioriryList.buy(inProgress.getSecurityName());
 		}
-		
+
 		if(inProgress.getTradeType().equals("Limit")) {
 			doLimitMatch(inProgress,orderList);
 		}else {
 			doMarketOrder(inProgress,orderList);
 		}
-		
+
 		return false;
 	}
 	public boolean doLimitMatch(InProgress current,List<InProgress> orderList) {
 		//Pranav Logic
 		InProgressDAO inProgressDAO = new InProgressDAO();
 		UserHistoryDAO userHistoryDAO = new UserHistoryDAO();
-		
+
 		//sell part
 		if(current.getDirection().equals("sell")) {
 			for(int i=0;i<orderList.size();i++) {
@@ -65,13 +65,13 @@ public class OrderMatching {
 						//commit
 						inProgressDAO.addOrUpdate(current);
 						inProgressDAO.addOrUpdate(orderList.get(i));
-						
+
 						//UserHistory Part
 						UserHistory transaction=new UserHistory(orderList.get(i).getUserId(), orderList.get(i).getOrderId(),current.getUserId(),
 								current.getOrderId(), current.getSecurityName(), current.getSecurityCode(),
 								current.getSecurityType(), current.getQuantity(),orderList.get(i).getPriceOfSecurity(), 
 								new Timestamp(new Date().getTime()), current.getCurrency());
-						
+
 						userHistoryDAO.addOrUpdate(transaction);
 						//commited
 						break;
@@ -101,7 +101,7 @@ public class OrderMatching {
 								current.getOrderId(), current.getSecurityName(), current.getSecurityCode(),
 								current.getSecurityType(), current.getQuantity(),orderList.get(i).getPriceOfSecurity(), 
 								new Timestamp(new Date().getTime()), current.getCurrency());
-						
+
 						userHistoryDAO.addOrUpdate(transaction);
 						//commited	
 					}
@@ -126,17 +126,17 @@ public class OrderMatching {
 						BigDecimal totalPrice=current.getPriceOfSecurity().multiply(new BigDecimal(current.getRemainingQuantity()));
 						orderList.get(i).setTotalPrice(totalPrice);
 						current.setTotalPrice(totalPrice);
-						
+
 						//commit
 						inProgressDAO.addOrUpdate(current);
 						inProgressDAO.addOrUpdate(orderList.get(i));
-						
+
 						//UserHistory Part
 						UserHistory transaction=new UserHistory(current.getUserId(),
 								current.getOrderId(), orderList.get(i).getUserId(), orderList.get(i).getOrderId(),current.getSecurityName(), current.getSecurityCode(),
 								current.getSecurityType(), current.getQuantity(),current.getPriceOfSecurity(), 
 								new Timestamp(new Date().getTime()), current.getCurrency());
-						
+
 						userHistoryDAO.addOrUpdate(transaction);
 						//commited
 						break;
@@ -166,18 +166,18 @@ public class OrderMatching {
 								current.getOrderId(), current.getSecurityName(), current.getSecurityCode(),
 								current.getSecurityType(), orderList.get(i).getQuantity(),current.getPriceOfSecurity(), 
 								new Timestamp(new Date().getTime()), current.getCurrency());
-						
+
 						userHistoryDAO.addOrUpdate(transaction);
 						//commited	
 					}
 				}
 			}
 		}
-		
-		
-		
-		
-		
+
+
+
+
+
 		//Hafeez Logic
 		/*InProgressDAO inProgressDAO = new InProgressDAO();
 		UserHistoryDAO userHistoryDAO = new UserHistoryDAO();
@@ -189,18 +189,18 @@ public class OrderMatching {
 							// complete order
 							inProgressDAO.delete(orderList.get(i-1));
 							UserHistory userHistory= 
-							
+
 	new UserHistory(orderList.get(i-1).getUserId(), orderList.get(i-1).getOrderId()+"", current.getUserId(),
 		current.getOrderId()+"", current.getSecurityName(), current.getSecurityCode(),
 		current.getSecurityType(), current.getQuantity(),new BigDecimal(current.getCurrency()), 
 		new Timestamp(new Date().getTime()), current.getCurrency());
 							userHistoryDAO.addOrUpdate(userHistory);
-							
+
 							InProgress temp = orderList.get(i-1);
 							temp.setQuantity(temp.getQuantity()-current.getQuantity());
 							inProgressDAO.addOrUpdate(temp);
-							
-							
+
+
 							return true;
 						}else if(orderList.get(i-1).getQuantity()==current.getQuantity()) {
 							// complete order
@@ -208,17 +208,17 @@ public class OrderMatching {
 							orderList.get(i-1).setStatus("completed");
 							inProgressDAO.addOrUpdate(orderList.get(i-1));
 							UserHistory userHistory= 
-							
+
 	new UserHistory(orderList.get(i-1).getUserId(), orderList.get(i-1).getOrderId()+"", current.getUserId(),
 		current.getOrderId()+"", current.getSecurityName(), current.getSecurityCode(),
 		current.getSecurityType(), current.getQuantity(),new BigDecimal(current.getCurrency()), 
 		new Timestamp(new Date().getTime()), current.getCurrency());
 							userHistoryDAO.addOrUpdate(userHistory);
-							
+
 							return true;
 						}else {
 							// partial
-							
+
 						}
 					}
 				}
@@ -230,35 +230,35 @@ public class OrderMatching {
 						if(orderList.get(i-1).getQuantity()>=current.getQuantity()) {
 							if(i!=0) {
 								// selling code
-								
+
 								if(orderList.get(i-1).getQuantity()>current.getQuantity()) {
 									// complete order
 									inProgressDAO.delete(orderList.get(i-1));
 									UserHistory userHistory= 
-									
+
 			new UserHistory(orderList.get(i-1).getUserId(), orderList.get(i-1).getOrderId()+"", current.getUserId(),
 				current.getOrderId()+"", current.getSecurityName(), current.getSecurityCode(),
 				current.getSecurityType(), current.getQuantity(),new BigDecimal(current.getCurrency()), 
 				new Timestamp(new Date().getTime()), current.getCurrency());
 									userHistoryDAO.addOrUpdate(userHistory);
-									
+
 									InProgress temp = orderList.get(i-1);
 									temp.setQuantity(temp.getQuantity()-current.getQuantity());
 									inProgressDAO.addOrUpdate(temp);
-									
-									
+
+
 									return true;
 								}else if(orderList.get(i-1).getQuantity()==current.getQuantity()) {
 									// complete order
 									inProgressDAO.delete(orderList.get(i-1));
 									UserHistory userHistory= 
-									
+
 			new UserHistory(orderList.get(i-1).getUserId(), orderList.get(i-1).getOrderId()+"", current.getUserId(),
 				current.getOrderId()+"", current.getSecurityName(), current.getSecurityCode(),
 				current.getSecurityType(), current.getQuantity(),new BigDecimal(current.getCurrency()), 
 				new Timestamp(new Date().getTime()), current.getCurrency());
 									userHistoryDAO.addOrUpdate(userHistory);
-									
+
 									return true;
 								}else {
 									// partial
@@ -269,57 +269,114 @@ public class OrderMatching {
 							// partial
 						}
 					}else {
-						
+
 					}
 				}
 			}
 		}*/
-		
+
 		return false;
 	}
 	public boolean doMarketOrder(InProgress current,List<InProgress> orderList) {
 		InProgressDAO inProgressDAO=new InProgressDAO();
 		UserHistoryDAO userHistoryDAO=new UserHistoryDAO();
-		
+		MarketCRUD market=new MarketCRUD();
+		ShareInfo share=new ShareInfo();
+
 		for(int i=0;i<orderList.size();i++) {
-			if(orderList.get(i).getQuantity()==current.getQuantity()) {
+			share =market.getIndiShareInfo(current.getSecurityName());
+			if(orderList.get(i).getRemainingQuantity()==current.getRemainingQuantity()) {
 				current.setStatus("Exe");
 				orderList.get(i).setStatus("Exe");
-				current.setRemainingQuantity(0);
-				orderList.get(i).setRemainingQuantity(0);
-				
+				current.setRemainingQuantity(current.getRemainingQuantity());
+				orderList.get(i).setRemainingQuantity(current.getRemainingQuantity());
+				BigDecimal totalPrice=share.getPriceOfSecurity().multiply(new BigDecimal(orderList.get(i).getRemainingQuantity()));
+				orderList.get(i).setTotalPrice(totalPrice);
+				current.setTotalPrice(totalPrice);
+
 				inProgressDAO.addOrUpdate(current);
 				inProgressDAO.addOrUpdate(orderList.get(i));
-				
-				UserHistory userHistory=
-						new UserHistory(orderList.get(i).getUserId(), orderList.get(i).getOrderId(), current.getUserId(),
-								current.getOrderId(), current.getSecurityName(), current.getSecurityCode(),
-								current.getSecurityType(), current.getQuantity(),current.getPriceOfSecurity(), 
-								new Timestamp(new Date().getTime()), current.getCurrency());
-				
-				userHistoryDAO.addOrUpdate(userHistory);
+
+				if(current.getDirection().equals("buy")) {
+					UserHistory userHistory=
+							new UserHistory( current.getUserId(),current.getOrderId(),orderList.get(i).getUserId(),
+									orderList.get(i).getOrderId(), current.getSecurityName(), current.getSecurityCode(),
+									current.getSecurityType(), current.getQuantity(),current.getPriceOfSecurity(), 
+									new Timestamp(new Date().getTime()), current.getCurrency());
+
+					userHistoryDAO.addOrUpdate(userHistory);
+				}else {
+					UserHistory userHistory=
+							new UserHistory(orderList.get(i).getUserId(), orderList.get(i).getOrderId(), current.getUserId(),
+									current.getOrderId(), current.getSecurityName(), current.getSecurityCode(),
+									current.getSecurityType(), current.getQuantity(),current.getPriceOfSecurity(), 
+									new Timestamp(new Date().getTime()), current.getCurrency());
+
+					userHistoryDAO.addOrUpdate(userHistory);
+				}
 				return true;
-			}else if(orderList.get(i).getQuantity()>current.getQuantity()) {
-				current.setStatus("completed");
-				 orderList.get(i).setStatus("Partial");
-				
+			}else if(orderList.get(i).getRemainingQuantity()>current.getRemainingQuantity()) {
+				current.setStatus("Exe");
+				orderList.get(i).setStatus("Par");
+				orderList.get(i).setRemainingQuantity(current.getRemainingQuantity());
+				current.setRemainingQuantity(current.getRemainingQuantity());
+				BigDecimal totalPrice=share.getPriceOfSecurity().multiply(new BigDecimal(orderList.get(i).getRemainingQuantity()));
+				orderList.get(i).setTotalPrice(totalPrice);
+				current.setTotalPrice(totalPrice);
 				inProgressDAO.addOrUpdate(current);
 				// inProgressDAO.addOrUpdate(orderList.get(i));
-				
-				orderList.get(i).setQuantity(orderList.get(i).getQuantity()-current.getQuantity());
+
 				inProgressDAO.addOrUpdate(orderList.get(i));
-				
-				
-				UserHistory userHistory=
-						new UserHistory(orderList.get(i).getUserId(), orderList.get(i).getOrderId(), current.getUserId(),
-								current.getOrderId(), current.getSecurityName(), current.getSecurityCode(),
-								current.getSecurityType(), current.getQuantity(),new BigDecimal(current.getCurrency()), 
-								new Timestamp(new Date().getTime()), current.getCurrency());
-				
-				userHistoryDAO.addOrUpdate(userHistory);
+
+
+				if(current.getDirection().equals("buy")) {
+					UserHistory userHistory=
+							new UserHistory( current.getUserId(),current.getOrderId(),orderList.get(i).getUserId(),
+									orderList.get(i).getOrderId(), current.getSecurityName(), current.getSecurityCode(),
+									current.getSecurityType(), current.getQuantity(),current.getPriceOfSecurity(), 
+									new Timestamp(new Date().getTime()), current.getCurrency());
+
+					userHistoryDAO.addOrUpdate(userHistory);
+				}else {
+					UserHistory userHistory=
+							new UserHistory(orderList.get(i).getUserId(), orderList.get(i).getOrderId(), current.getUserId(),
+									current.getOrderId(), current.getSecurityName(), current.getSecurityCode(),
+									current.getSecurityType(), current.getQuantity(),current.getPriceOfSecurity(), 
+									new Timestamp(new Date().getTime()), current.getCurrency());
+
+					userHistoryDAO.addOrUpdate(userHistory);
+				}
 				return true;
 			} else {
-				// partial
+				current.setStatus("Par");
+				orderList.get(i).setStatus("Exe");
+				orderList.get(i).setRemainingQuantity(orderList.get(i).getRemainingQuantity());
+				current.setRemainingQuantity(orderList.get(i).getRemainingQuantity());
+				BigDecimal totalPrice=share.getPriceOfSecurity().multiply(new BigDecimal(orderList.get(i).getRemainingQuantity()));
+				orderList.get(i).setTotalPrice(totalPrice);
+				current.setTotalPrice(totalPrice);
+				inProgressDAO.addOrUpdate(current);
+				// inProgressDAO.addOrUpdate(orderList.get(i));
+				inProgressDAO.addOrUpdate(orderList.get(i));
+
+				if(current.getDirection().equals("buy")) {
+					UserHistory userHistory=
+							new UserHistory( current.getUserId(),current.getOrderId(),orderList.get(i).getUserId(),
+									orderList.get(i).getOrderId(), current.getSecurityName(), current.getSecurityCode(),
+									current.getSecurityType(), current.getQuantity(),current.getPriceOfSecurity(), 
+									new Timestamp(new Date().getTime()), current.getCurrency());
+
+					userHistoryDAO.addOrUpdate(userHistory);
+				}else {
+					UserHistory userHistory=
+							new UserHistory(orderList.get(i).getUserId(), orderList.get(i).getOrderId(), current.getUserId(),
+									current.getOrderId(), current.getSecurityName(), current.getSecurityCode(),
+									current.getSecurityType(), current.getQuantity(),current.getPriceOfSecurity(), 
+									new Timestamp(new Date().getTime()), current.getCurrency());
+
+					userHistoryDAO.addOrUpdate(userHistory);
+				}
+				return true;
 			}
 		}
 		return false;

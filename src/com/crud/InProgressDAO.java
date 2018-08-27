@@ -19,7 +19,7 @@ public class InProgressDAO {
 	}
 	public void addOrUpdate(InProgress inProgress) {
 		Configuration conf=new Configuration();
-		conf.configure("hibernateconfig.xml");
+		conf.configure("hibernate.cfg.xml");
 		
 		// creating session
 		SessionFactory factory=conf.buildSessionFactory();

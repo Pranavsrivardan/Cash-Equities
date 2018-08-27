@@ -1,46 +1,4 @@
 @import url("https://fonts.googleapis.com/css?family=PT+Sans:400italic,400,700");
-/*
- *
- *   Tradify - Responsive Crypto/Stock Trading User Interface
- *   version 1.0.0
- *   Last Updated  - 04/01/2018
- *
- *
- *  - Body Area
- *  - Buttons (Focus)
- *  - Line Separator
- *  - Header Area
- *  - Panels
- *  - Navigations
- *  - Tabs + Navs
- *  - Forms
- *  - Scrollbar
- *  - Progress Bar
- *  - Popovers
- *  - Navigations Dropdown
- *  - Carousel
- *  - Top Navigations Bar
- *  - Sidebar Navigations
- *  - Heading, Buttons & Badges
- *  - Notifcations
- *  - Placeholders & Panels
- *  - Flot Chart
- *  - Points
- *  - Timelines
- *  - Table
- *  - Widgets
- *  - Landing Page
- *  - Navbar Custom
- *  - Navbar White
- *  - Home
- *  - Wrapper
- *  - Footer Area
-*/
-
-/* Body Area */
-
-
-
 body {
   background: #eef0f4;
 }

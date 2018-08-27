@@ -31,7 +31,9 @@ public class OrderCRUD {
 		try {
 			 //orderinfo= session.createQuery("from InProgress").list();	
 			 orderinfo=session.createCriteria(InProgress.class)
-					 .addOrder(Order.desc("timeStamp")).list();
+					 .addOrder(Order.desc("timeStamp"))
+					 .add(Restrictions.like("status", "Exe")).list();
+			 
 		}catch(Exception e) {
 			System.out.println(e);
 		}

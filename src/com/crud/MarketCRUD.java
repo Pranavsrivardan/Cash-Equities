@@ -6,8 +6,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionFactoryImpl;
 
+import com.trade.InProgress;
 import com.trade.ShareInfo;
 
 public class MarketCRUD {
@@ -34,5 +36,16 @@ public class MarketCRUD {
 		return shareinfo;
 	}
 	
+	public ShareInfo getIndiShareInfo(String stock) {
+		ShareInfo share = null;
+		try {
+			share=(ShareInfo) session.createCriteria(ShareInfo.class)
+    	    .add( Restrictions.like("securityName", stock));
+		}catch(Exception e) {
+			//transaction.rollback();
+			System.out.println(e);
+		}
+		return share;
+	}
 	
 }
