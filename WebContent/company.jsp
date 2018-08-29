@@ -187,7 +187,7 @@ $(document).ready(function(){
                         <li><a href="#">Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="landing.html">Logout</a>
+                        <li><a href="login">Logout</a>
                         </li>
                      </ul>
                   </li>

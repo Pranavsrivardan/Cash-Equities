@@ -18,10 +18,11 @@ public class OrderCRUD {
 	private static Transaction transaction = null;
 	private static Session session = null;
 	static Configuration config=null; 
+	static SessionFactory factory=null;
 	public OrderCRUD() {
 
 		config= new Configuration().configure("hibernate.cfg.xml");
-		SessionFactory factory = config.buildSessionFactory();
+		factory = config.buildSessionFactory();
 		 session = factory.openSession();
 		 transaction = session.beginTransaction();
 	}
@@ -34,6 +35,8 @@ public class OrderCRUD {
 					 .addOrder(Order.desc("timeStamp"))
 					 .add(Restrictions.like("status", "Exe")).list();
 			 
+			 transaction.commit();
+			 factory.close();
 		}catch(Exception e) {
 			System.out.println(e);
 		}
@@ -42,12 +45,16 @@ public class OrderCRUD {
 	
 	public List<InProgress> getIndividualOrderInfo(String userId){
 		List<InProgress> indiOrderInfo = null;
+		System.out.println(userId);
 		try {
 			 //orderinfo= session.createQuery("from InProgress").list();	
 			 indiOrderInfo=session.createCriteria(InProgress.class)
 					 .add(Restrictions.like("userId", userId))
 					 .add(Restrictions.like("status", "Not Exe"))
 					 .addOrder(Order.desc("timeStamp")).list();
+			 transaction.commit();
+			 factory.close();
+
 		}catch(Exception e) {
 			System.out.println(e);
 		}

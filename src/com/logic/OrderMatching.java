@@ -19,8 +19,6 @@ public class OrderMatching {
 
 		InProgressDAO inProgressDAO=new InProgressDAO();
 		inProgressDAO.addOrUpdate(inProgress);
-
-
 		// limit order
 		List<InProgress> orderList=null;
 		if(inProgress.getDirection().equals("buy")) {
@@ -51,6 +49,7 @@ public class OrderMatching {
 					// if quantity available is greater
 					if(orderList.get(i).getRemainingQuantity()>=current.getRemainingQuantity()) {
 						//match done
+						BigDecimal totalPrice=orderList.get(i).getPriceOfSecurity().multiply(new BigDecimal(current.getRemainingQuantity()));
 						orderList.get(i).setRemainingQuantity(current.getRemainingQuantity());
 						current.setRemainingQuantity(current.getRemainingQuantity());
 						current.setStatus("Exe");
@@ -59,9 +58,8 @@ public class OrderMatching {
 						}else {
 							orderList.get(i).setStatus("Par");
 						}
-						BigDecimal totalPrice=orderList.get(i).getPriceOfSecurity().multiply(new BigDecimal(current.getRemainingQuantity()));
-						orderList.get(i).setTotalPrice(totalPrice);
-						current.setTotalPrice(totalPrice);
+						orderList.get(i).add(totalPrice);
+						current.add(totalPrice);
 						//commit
 						inProgressDAO.addOrUpdate(current);
 						inProgressDAO.addOrUpdate(orderList.get(i));
@@ -77,6 +75,7 @@ public class OrderMatching {
 						break;
 					}else {
 						//if the stock quantity is partially available
+						BigDecimal totalPrice=orderList.get(i).getPriceOfSecurity().multiply(new BigDecimal(orderList.get(i).getRemainingQuantity()));
 						current.setRemainingQuantity(orderList.get(i).getRemainingQuantity());
 						orderList.get(i).setRemainingQuantity(orderList.get(i).getRemainingQuantity());
 						if(orderList.get(i).getRemainingQuantity()==0) {
@@ -90,9 +89,8 @@ public class OrderMatching {
 							current.setStatus("Exe");
 						}
 						//since only orderlist quantity is sold
-						BigDecimal totalPrice=orderList.get(i).getPriceOfSecurity().multiply(new BigDecimal(orderList.get(i).getRemainingQuantity()));
-						orderList.get(i).setTotalPrice(totalPrice);
-						current.setTotalPrice(totalPrice);
+						orderList.get(i).add(totalPrice);
+						current.add(totalPrice);
 						//commit
 						inProgressDAO.addOrUpdate(current);
 						inProgressDAO.addOrUpdate(orderList.get(i));
@@ -115,6 +113,7 @@ public class OrderMatching {
 					// if quantity available is greater
 					if(orderList.get(i).getRemainingQuantity()>=current.getRemainingQuantity()) {
 						//match done
+						BigDecimal totalPrice=current.getPriceOfSecurity().multiply(new BigDecimal(current.getRemainingQuantity()));
 						orderList.get(i).setRemainingQuantity(current.getRemainingQuantity());
 						current.setRemainingQuantity(current.getRemainingQuantity());
 						current.setStatus("Exe");
@@ -123,9 +122,8 @@ public class OrderMatching {
 						}else {
 							orderList.get(i).setStatus("Par");
 						}
-						BigDecimal totalPrice=current.getPriceOfSecurity().multiply(new BigDecimal(current.getRemainingQuantity()));
-						orderList.get(i).setTotalPrice(totalPrice);
-						current.setTotalPrice(totalPrice);
+						orderList.get(i).add(totalPrice);
+						current.add(totalPrice);
 
 						//commit
 						inProgressDAO.addOrUpdate(current);
@@ -142,6 +140,7 @@ public class OrderMatching {
 						break;
 					}else {
 						//if the stock quantity is partially available
+						BigDecimal totalPrice=current.getPriceOfSecurity().multiply(new BigDecimal(orderList.get(i).getRemainingQuantity()));
 						current.setRemainingQuantity(orderList.get(i).getRemainingQuantity());
 						orderList.get(i).setRemainingQuantity(orderList.get(i).getRemainingQuantity());
 						if(orderList.get(i).getRemainingQuantity()==0) {
@@ -155,9 +154,8 @@ public class OrderMatching {
 							current.setStatus("Exe");
 						}
 						//since only orderlist quantity is sold
-						BigDecimal totalPrice=current.getPriceOfSecurity().multiply(new BigDecimal(orderList.get(i).getRemainingQuantity()));
-						orderList.get(i).setTotalPrice(totalPrice);
-						current.setTotalPrice(totalPrice);
+						orderList.get(i).add(totalPrice);
+						current.add(totalPrice);
 						//commit
 						inProgressDAO.addOrUpdate(current);
 						inProgressDAO.addOrUpdate(orderList.get(i));
@@ -288,11 +286,13 @@ public class OrderMatching {
 			if(orderList.get(i).getRemainingQuantity()==current.getRemainingQuantity()) {
 				current.setStatus("Exe");
 				orderList.get(i).setStatus("Exe");
+				BigDecimal totalPrice=share.getPriceOfSecurity().multiply(new BigDecimal(orderList.get(i).getRemainingQuantity()));
 				current.setRemainingQuantity(current.getRemainingQuantity());
 				orderList.get(i).setRemainingQuantity(current.getRemainingQuantity());
-				BigDecimal totalPrice=share.getPriceOfSecurity().multiply(new BigDecimal(orderList.get(i).getRemainingQuantity()));
-				orderList.get(i).setTotalPrice(totalPrice);
-				current.setTotalPrice(totalPrice);
+				orderList.get(i).setPriceOfSecurity(share.getPriceOfSecurity());
+				current.setPriceOfSecurity(share.getPriceOfSecurity());
+				orderList.get(i).add(totalPrice);
+				current.add(totalPrice);
 
 				inProgressDAO.addOrUpdate(current);
 				inProgressDAO.addOrUpdate(orderList.get(i));
@@ -318,16 +318,17 @@ public class OrderMatching {
 			}else if(orderList.get(i).getRemainingQuantity()>current.getRemainingQuantity()) {
 				current.setStatus("Exe");
 				orderList.get(i).setStatus("Par");
+				BigDecimal totalPrice=share.getPriceOfSecurity().multiply(new BigDecimal(current.getRemainingQuantity()));
 				orderList.get(i).setRemainingQuantity(current.getRemainingQuantity());
 				current.setRemainingQuantity(current.getRemainingQuantity());
-				BigDecimal totalPrice=share.getPriceOfSecurity().multiply(new BigDecimal(orderList.get(i).getRemainingQuantity()));
-				orderList.get(i).setTotalPrice(totalPrice);
-				current.setTotalPrice(totalPrice);
+				orderList.get(i).setPriceOfSecurity(share.getPriceOfSecurity());
+				current.setPriceOfSecurity(share.getPriceOfSecurity());
+				orderList.get(i).add(totalPrice);
+				current.add(totalPrice);
 				inProgressDAO.addOrUpdate(current);
 				// inProgressDAO.addOrUpdate(orderList.get(i));
 
 				inProgressDAO.addOrUpdate(orderList.get(i));
-
 
 				if(current.getDirection().equals("buy")) {
 					UserHistory userHistory=
@@ -350,11 +351,14 @@ public class OrderMatching {
 			} else {
 				current.setStatus("Par");
 				orderList.get(i).setStatus("Exe");
+				
+				BigDecimal totalPrice=share.getPriceOfSecurity().multiply(new BigDecimal(orderList.get(i).getRemainingQuantity()));
 				orderList.get(i).setRemainingQuantity(orderList.get(i).getRemainingQuantity());
 				current.setRemainingQuantity(orderList.get(i).getRemainingQuantity());
-				BigDecimal totalPrice=share.getPriceOfSecurity().multiply(new BigDecimal(orderList.get(i).getRemainingQuantity()));
-				orderList.get(i).setTotalPrice(totalPrice);
-				current.setTotalPrice(totalPrice);
+				orderList.get(i).setPriceOfSecurity(share.getPriceOfSecurity());
+				current.setPriceOfSecurity(share.getPriceOfSecurity());
+				orderList.get(i).add(totalPrice);
+				current.add(totalPrice);
 				inProgressDAO.addOrUpdate(current);
 				// inProgressDAO.addOrUpdate(orderList.get(i));
 				inProgressDAO.addOrUpdate(orderList.get(i));

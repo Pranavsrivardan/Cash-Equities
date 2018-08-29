@@ -17,10 +17,11 @@ public class MarketCRUD {
 	private static Transaction transaction = null;
 	private static Session session = null;
 	static Configuration config=null; 
+	static SessionFactory factory=null; 
 	public MarketCRUD() {
 		// TODO Auto-generated constructor stub
 		config= new Configuration().configure("hibernate.cfg.xml");
-		SessionFactory factory = config.buildSessionFactory();
+		factory = config.buildSessionFactory();
 		 session = factory.openSession();
 		 transaction = session.beginTransaction();
 	}
@@ -29,6 +30,8 @@ public class MarketCRUD {
 		List<ShareInfo> shareinfo = null;
 		try {
 			 shareinfo= session.createQuery("from ShareInfo").list();	
+			 transaction.commit();
+			 factory.close();
 		}catch(Exception e) {
 			//transaction.rollback();
 			System.out.println(e);
@@ -41,6 +44,8 @@ public class MarketCRUD {
 		try {
 			share=(ShareInfo) session.createCriteria(ShareInfo.class)
     	    .add( Restrictions.like("securityName", stock));
+			transaction.commit();
+			 factory.close();
 		}catch(Exception e) {
 			//transaction.rollback();
 			System.out.println(e);

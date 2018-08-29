@@ -29,7 +29,7 @@ public class InProgress {
 		return totalPrice;
 	}
 	public void setTotalPrice(BigDecimal totalPrice) {
-		this.totalPrice = this.totalPrice.add(totalPrice);
+		this.totalPrice = (totalPrice);
 	}
 	public String getUserName() {
 		return userName;
@@ -115,6 +115,9 @@ public class InProgress {
 		this.status = status;
 	}
 	
+	public void add(BigDecimal totalPrice){
+		this.totalPrice= this.totalPrice.add(totalPrice);
+	}
 	
 	
 

@@ -24,6 +24,7 @@
                 <mapping resource="inprogress.hbm.xml" />
                 
                  <mapping resource="userstockinfo.hbm.xml" />
+                  <mapping resource="wallet.hbm.xml" />
         
     </session-factory>
 </hibernate-configuration>

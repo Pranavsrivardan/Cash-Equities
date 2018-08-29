@@ -1,5 +1,7 @@
 package com.trade;
 
+import java.math.BigDecimal;
+
 public class UserDetail {
 
 	long accountNumber;
@@ -7,6 +9,13 @@ public class UserDetail {
 	String fullName;
 	String pan;
 	String aadharNumber;
+	BigDecimal walletBalance;
+	public BigDecimal getWalletBalance() {
+		return walletBalance;
+	}
+	public void setWalletBalance(BigDecimal walletBalance) {
+		this.walletBalance = walletBalance;
+	}
 	public long getAccountNumber() {
 		return accountNumber;
 	}
@@ -37,5 +46,8 @@ public class UserDetail {
 	public void setAadharNumber(String aadharNumber) {
 		this.aadharNumber = aadharNumber;
 	}
+	
+	
+	
 	
 }
