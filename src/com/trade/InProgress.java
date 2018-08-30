@@ -101,9 +101,10 @@ public class InProgress {
 	public String getDirection() {
 		if(direction.equals("B")) {
 			return "Buy";
-		}else {
+		}else if(direction.equals("S")){
 			return "Sell";
 		}
+		return direction;
 	}
 	public void setDirection(String direction) {
 		this.direction = direction;

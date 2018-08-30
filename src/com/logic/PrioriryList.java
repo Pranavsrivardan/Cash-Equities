@@ -21,8 +21,8 @@ import org.hibernate.criterion.Restrictions;
 import com.trade.InProgress;
 
 public class PrioriryList {
-	protected List<InProgress> buy(String stock) {
-		Configuration config = new Configuration().configure("hibernateconfig.xml");  
+	public List<InProgress> buy(String stock) {
+		Configuration config = new Configuration().configure("hibernate.cfg.xml");  
     	SessionFactory factory = config.buildSessionFactory();  
     	Session session = factory.openSession();  
         Transaction transaction = null;
@@ -51,9 +51,9 @@ public class PrioriryList {
 		return InProgressList;
 	}
 
-	protected List<InProgress> sell(String stock) {
+	public List<InProgress> sell(String stock) {
 		
-		Configuration config = new Configuration().configure("hibernateconfig.xml");  
+		Configuration config = new Configuration().configure("hibernate.cfg.xml");  
     	SessionFactory factory = config.buildSessionFactory();  
     	Session session = factory.openSession();  
         Transaction transaction = null;

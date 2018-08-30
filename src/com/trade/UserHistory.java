@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 
 public class UserHistory {
 
-	String transactionId;
+	long transactionId;
 	String userIdB;
 	long orderIdB;
 	String userIdS;
@@ -34,10 +34,10 @@ public class UserHistory {
 		this.currency = currency;
 	}
 	
-	public String getTransactionId() {
+	public long getTransactionId() {
 		return transactionId;
 	}
-	public void setTransactionId(String transactionId) {
+	public void setTransactionId(long transactionId) {
 		this.transactionId = transactionId;
 	}
 	public String getUserIdB() {

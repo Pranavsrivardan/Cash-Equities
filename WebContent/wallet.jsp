@@ -1,8 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
+
 
 <head>
   <meta charset="utf-8">
@@ -49,6 +51,9 @@
   </style>
 
   <script>
+  var a;
+  var b;
+  var c;
     $(document).ready(function() {
       $("#deposit").click(function() {
         $("#add_money").fadeIn(10, function() {
@@ -57,6 +62,8 @@
                 $("#add_money4").fadeIn(10,function(){
                   $("#add_money").fadeOut(10, function() {
                      $("#submit1").click(function() {
+                    	 
+                    	 
                         $("#success").fadeIn(10,function(){
                             $("#add_money4").fadeOut(10,function(){
                                 setTimeout(function(){location.href="wallet.jsp";}, 3000);
@@ -86,9 +93,24 @@
   </script>
   <script>
   function sync() {
-    var a = document.getElementById('enter_amount').value;
+     a = document.getElementById('enter_amount').value;
     document.getElementById('net_amount').value = a - (a * (0.02));
+    c = a - (a * (0.02));
+    document.getElementById('myField').value = c;
+  
+    
   }
+  
+  function clicked1(){
+	  b = "deposit";
+	  document.getElementById('type').value = b;
+  }
+  
+  function clicked2(){
+	  b = "withdraw";
+	  document.getElementById('type').value = b;
+  }
+  
   </script>
 </head>
 
@@ -322,7 +344,7 @@
        <tbody>
        <tr>
        <td style="font-size:16px;" class="ng-binding">
-       {}
+       0.00
        <span class="inrLabel">INR</span>
        </td>
        <td style="font-size:16px;" class="ng-binding">
@@ -334,12 +356,16 @@
        <span class="inrLabel">INR</span>
        </td>
        <td style="font-size:25px;padding-right:10px;width:250px">
-         <button id="deposit" type="button" class="btn btn-primary bold deposit_button" data-toggle="modal" data-target="#DepositModal" data-max="50000" data-min="10" data-name="Credit Card" data-id="4" style="width:115px; align:center;font-size:13px;float:left">
-        <i class="fa fa-money"></i> DEPOSIT
-        </button>
-        <button id="withdraw" type="button" class="btn btn-success bold deposit_button" data-toggle="modal" data-target="#DepositModal" data-max="50000" data-min="10" data-name="Credit Card" data-id="4" style="width:115px; align:center;font-size:13px;float:right">
-       <i class="fa fa-money"></i> WITHDRAW
-       </button>
+       <form method="post" action="walletlist">
+         <input id="deposit" onClick="clicked1()" name="submitval" value="deposit" type="button" class="btn btn-primary bold deposit_button" data-toggle="modal" data-target="#DepositModal" data-max="50000" data-min="10" data-name="Credit Card" data-id="4" style="width:115px; align:center;font-size:13px;float:left">
+        <i class="fa fa-money"></i>
+        </input>
+        <input id="withdraw" onClick="clicked2()" name="submitval" value="withdraw" type="button" class="btn btn-success bold deposit_button" data-toggle="modal" data-target="#DepositModal" data-max="50000" data-min="10" data-name="Credit Card" data-id="4" style="width:115px; align:center;font-size:13px;float:right">
+       <i class="fa fa-money"></i>
+       </input>
+        <input style="display:none;" type="number" name="myField" id="myField"/>
+                     <input style="display:none;" type="number" name="type" id="type"/>
+       </form>
        </td>
        </tr>
        </tbody>
@@ -398,10 +424,10 @@
      </div>
    </div>
  </div>
-   <!-- wallet history-->
-
+ 
+ <!-- wallet history-->
         <!-- Add money via Credit Card -->
-        <div id="add_money" class="modal fade in" id="DepositModal" tabindex="-1" role="basic" aria-hidden="true" style="display: none; padding-right: 17px;">
+        <div id="add_money" class="modal fade in" id="DepositModal" tabindex="-1" role="basic" aria-hidden="true" style="padding-right: 17px;">
           <div class="modal-dialog"> <br> <br> <br> <br> <br>
             <div class="modal-content">
               <div class="modal-header">
@@ -438,15 +464,13 @@
                 </div>
                 <div class="modal-footer">
                   <button style="font-size:15px" type="button" class="btn btn-default" data-dismiss="modal" onclick="location.reload()">Close</button>
-                  <input style="font-size:15px" id="add" type="submit" class="btn btn-primary">SUBMIT</button>
+                  <input style="font-size:15px" id="add" type="submit" class="btn btn-primary"></input>
                 </div>
               </form>
             </div>
           </div>
         </div>
-
-
-
+  
         <!-- CREDIT CARD FORM STARTS HERE -->
          <form method="post" action="walletlist">
         <div class="container" id="add_money4" style="margin-left:250px;display:none">
@@ -511,9 +535,11 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
-                            <input id="submit1" name="submit" style="padding:5px 5px" class="subscribe btn btn-success btn-lg btn-block" type="submit">SUBMIT</button>
+                            <input id="submit1" name="submit" style="padding:5px 5px" class="subscribe btn btn-success btn-lg btn-block" type="submit"></input>
                         </div>
                     </div>
+                    
+                   
                     <div class="row" style="display:none;">
                         <div class="col-xs-12">
                             <p class="payment-errors"></p>

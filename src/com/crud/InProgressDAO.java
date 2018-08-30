@@ -28,10 +28,11 @@ public class InProgressDAO {
 		// get the current hibernate session
 		Transaction t=session.beginTransaction();
 		// create a query  ... sort by last name
-		
+		System.out.println("going to save2");
 		session.saveOrUpdate(inProgress);
-		
 		// return the results
+		System.out.println(inProgress.getCurrency());
+		session.flush();
 		t.commit();
 		factory.close();
 	}
@@ -53,4 +54,28 @@ public class InProgressDAO {
 		t.commit();
 		factory.close();
 	}
+	
+	public InProgress getRow(long id) {
+		Configuration conf=new Configuration();
+		conf.configure("hibernate.cfg.xml");
+		
+		// creating session
+		SessionFactory factory=conf.buildSessionFactory();
+		Session session=factory.openSession();
+		
+		// get the current hibernate session
+		Transaction t=session.beginTransaction();
+		// create a query  ... sort by last name
+		
+		InProgress inProgress = session.get(InProgress.class,id);
+		
+		
+		// return the results
+		t.commit();
+		factory.close();
+		
+		return inProgress;
+	}
+
+
 }

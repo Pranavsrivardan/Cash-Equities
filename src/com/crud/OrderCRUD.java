@@ -35,13 +35,46 @@ public class OrderCRUD {
 					 .addOrder(Order.desc("timeStamp"))
 					 .add(Restrictions.like("status", "Exe")).list();
 			 
-			 transaction.commit();
-			 factory.close();
+			 
 		}catch(Exception e) {
 			System.out.println(e);
 		}
 		return orderinfo;
 	}
+	
+	public List<InProgress> getBuyOrders() {
+		List<InProgress> orderinfo = null;
+		try {
+			 //orderinfo= session.createQuery("from InProgress").list();	
+			 orderinfo=session.createCriteria(InProgress.class)
+					 .addOrder(Order.desc("timeStamp"))
+					 .add(Restrictions.like("status", "Not Exe"))
+					 .add(Restrictions.like("direction", "Buy")).list();
+			 System.out.println(orderinfo.size());
+			
+		}catch(Exception e) {
+			System.out.println(e);
+		}
+		return orderinfo;
+	}
+	
+	public List<InProgress> getSellOrders() {
+		List<InProgress> orderinfo = null;
+		try {
+			 //orderinfo= session.createQuery("from InProgress").list();	
+			 orderinfo=session.createCriteria(InProgress.class)
+					 .addOrder(Order.desc("timeStamp"))
+					 .add(Restrictions.like("status", "Not Exe"))
+					 .add(Restrictions.like("direction", "Sell"))
+					 .list();
+			 System.out.println(orderinfo.size());
+			 
+		}catch(Exception e) {
+			System.out.println(e);
+		}
+		return orderinfo;
+	}
+	
 	
 	public List<InProgress> getIndividualOrderInfo(String userId){
 		List<InProgress> indiOrderInfo = null;
@@ -52,8 +85,7 @@ public class OrderCRUD {
 					 .add(Restrictions.like("userId", userId))
 					 .add(Restrictions.like("status", "Not Exe"))
 					 .addOrder(Order.desc("timeStamp")).list();
-			 transaction.commit();
-			 factory.close();
+			
 
 		}catch(Exception e) {
 			System.out.println(e);

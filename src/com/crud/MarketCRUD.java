@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.internal.SessionFactoryImpl;
 
@@ -29,9 +30,10 @@ public class MarketCRUD {
 	public List<ShareInfo> getShareInfo() {
 		List<ShareInfo> shareinfo = null;
 		try {
-			 shareinfo= session.createQuery("from ShareInfo").list();	
-			 transaction.commit();
-			 factory.close();
+			 shareinfo= session.createCriteria(ShareInfo.class)
+					 .addOrder(Order.asc("securityCode"))
+					 .list();	
+			 
 		}catch(Exception e) {
 			//transaction.rollback();
 			System.out.println(e);
@@ -39,13 +41,26 @@ public class MarketCRUD {
 		return shareinfo;
 	}
 	
+	
 	public ShareInfo getIndiShareInfo(String stock) {
 		ShareInfo share = null;
 		try {
 			share=(ShareInfo) session.createCriteria(ShareInfo.class)
     	    .add( Restrictions.like("securityName", stock));
-			transaction.commit();
-			 factory.close();
+			
+		}catch(Exception e) {
+			//transaction.rollback();
+			System.out.println(e);
+		}
+		return share;
+	}
+	
+	public ShareInfo getIndiShareInfo2(String stock) {
+		ShareInfo share = null;
+		try {
+			share= (ShareInfo) session.createCriteria(ShareInfo.class)
+    	    .add( Restrictions.like("securityCode", stock)).list().get(0);
+			
 		}catch(Exception e) {
 			//transaction.rollback();
 			System.out.println(e);

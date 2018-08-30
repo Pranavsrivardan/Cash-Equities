@@ -33,7 +33,6 @@
     <servlet-name>TickerServlet</servlet-name>
     <url-pattern>/ticker</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>indiordertableservlet</servlet-name>
     <servlet-class>com.servlet.IndividualOrder</servlet-class>
@@ -41,5 +40,29 @@
   <servlet-mapping>
     <servlet-name>indiordertableservlet</servlet-name>
     <url-pattern>/individualorder</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>BuyOrders</servlet-name>
+    <servlet-class>com.servlet.BuyOrders</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BuyOrders</servlet-name>
+    <url-pattern>/buyorders</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>SellOrders</servlet-name>
+    <servlet-class>com.servlet.Sellorders</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SellOrders</servlet-name>
+    <url-pattern>/sellorders</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>GainLose</servlet-name>
+    <servlet-class>com.servlet.GainLose</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GainLose</servlet-name>
+    <url-pattern>/gainloss</url-pattern>
   </servlet-mapping>
 </web-app>

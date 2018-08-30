@@ -1,54 +1,48 @@
 package com.crud;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import com.trade.UserHistory;
-import com.trade.Wallet;
+import com.trade.InProgress;
+import com.trade.ShareDetail;
+import com.trade.ShareInfo;
 
-
-public class WalletCRUD {
+public class ShareDetailDAO {
 
 	private static Transaction transaction = null;
 	private static Session session = null;
 	static Configuration config=null; 
-	public WalletCRUD() {
+	
+	public ShareDetailDAO(){
 		config= new Configuration().configure("hibernate.cfg.xml");
 		SessionFactory factory = config.buildSessionFactory();
 		 session = factory.openSession();
 		 transaction = session.beginTransaction();
 	}
 	
-	public List<Wallet> getWalletInfo(String userId) {
-		List<Wallet> walletinfo = null;
-//		int i=0;
-//		if(i==0) {
-//			Wallet wallet=new Wallet(1,"L001","Leo Messi","deposit",new Timestamp(new Date().getTime()),new BigDecimal(6000));
-//			addOrUpdate(wallet);
-//			i++;
-//			
-//		}
+	public List<ShareDetail> getShareDetail() {
+		List<ShareDetail> share = null;
 		try {
-			walletinfo=session.createCriteria(Wallet.class)
-					.add(Restrictions.like("userId", userId))
-					 .addOrder(Order.desc("timeStamp")).list();
+			share= session.createCriteria(ShareInfo.class)
+					.add(Restrictions.like("timeStamp", "2018-07-19 09:00:00"))
+					.addOrder(Order.asc("securityCode")).list();
+					
+    	   
+			
 		}catch(Exception e) {
+			//transaction.rollback();
 			System.out.println(e);
 		}
-		return walletinfo;
+		return share;
 	}
 	
-	public void addOrUpdate(Wallet wallet) {
+	public void addOrUpdate(ShareDetail sharedetail) {
 		Configuration conf=new Configuration();
 		conf.configure("hibernate.cfg.xml");
 		
@@ -60,11 +54,12 @@ public class WalletCRUD {
 		Transaction t=session.beginTransaction();
 		// create a query  ... sort by last name
 		
-		session.saveOrUpdate(wallet);
+		session.saveOrUpdate(sharedetail);
 		
 		// return the results
 		t.commit();
 		factory.close();
 	}
+	
 	
 }
