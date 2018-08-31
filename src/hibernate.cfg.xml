@@ -13,13 +13,14 @@
         <property name="hbm2ddl.auto">update</property>
         <property name="hibernate.connection.autocommit">true</property>
         <mapping resource="user.hbm.xml" />
+        <mapping resource="sharedetail.hbm.xml" />
                 <mapping resource="userdetail.hbm.xml" />
         
                 <mapping resource="userhistory.hbm.xml" />
         
                 <mapping resource="shareinfo.hbm.xml" />
         
-                <mapping resource="sharedetail.hbm.xml" />
+                
         
                 <mapping resource="inprogress.hbm.xml" />
                 

@@ -51,8 +51,8 @@ public class LoginDAO {
 	}
 	public static boolean checkForLogin(HttpServletRequest request) {
 		HttpSession session = request.getSession();
-		if(session!=null || session.getAttribute("userid")!=null || session.getAttribute("username")!=null) {
-			if(session.getAttribute("userid").equals("") || session.getAttribute("password").equals("")) {
+		if(session!=null && session.getAttribute("userid")!=null && session.getAttribute("username")!=null) {
+			if(session.getAttribute("userid").equals("")) {
 				return false;
 			}else {
 				return true;

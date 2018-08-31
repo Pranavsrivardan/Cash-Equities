@@ -12,7 +12,7 @@
                                           <tbody>
                                           <c:forEach items="${securityList}" var="security" varStatus="status">
                                              <!-- BCH Starts Here -->
-                                             <tr class="clickable-row" data-href="market.jsp">
+                                             <tr class="clickable-row" data-href="market.jsp" onclick="window.location='company?id=${security.securityCode}&stock=${security.securityName}'">
                                                 <td class="tableSmallPad">
                                                    <!--RADIO 1-->
                                                    <input type="radio" class="radio_item" value=${ security.securityName} name=${ security.securityName} id="radio1">

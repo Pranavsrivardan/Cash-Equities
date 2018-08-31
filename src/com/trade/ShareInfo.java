@@ -1,6 +1,7 @@
 package com.trade;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 public class ShareInfo {
 
@@ -10,6 +11,7 @@ public class ShareInfo {
 	long quantityAvailable;
 	BigDecimal priceOfSecurity;
 	String symbol;
+	
 	BigDecimal changedPrice;
 	public BigDecimal getChangedPrice() {
 		return changedPrice;

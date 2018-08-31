@@ -1,6 +1,7 @@
 package com.logic;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,14 +11,18 @@ import com.trade.ShareInfo;
 public class GainerLoser {
 	
 	public List<Integer> comparison(List<ShareInfo> share,List<ShareDetail> sharedetail) {
-		BigDecimal max1=new BigDecimal(0.0);
-		BigDecimal min=new BigDecimal(-100.0);
-		List<Integer> ans=null;
-		List<BigDecimal> difference = null;
-		List<BigDecimal> difference1 = null;
-		for(int i=0;i<share.size();i++) {
-			difference.add(share.get(i).getPriceOfSecurity().subtract(sharedetail.get(i).getOpen()));
-			difference1.add(share.get(i).getPriceOfSecurity().subtract(sharedetail.get(i).getOpen()));
+	
+		List<Integer> ans=new ArrayList<Integer>();
+		List<BigDecimal> difference = new ArrayList<BigDecimal>();
+		List<BigDecimal> difference1 = new ArrayList<BigDecimal>();
+		System.out.println(share.size()+""+sharedetail.size());
+		System.out.println(share.get(0).getPriceOfSecurity());
+		System.out.println(sharedetail.get(0).getOpen());
+		for(int i=0;i<7;i++) {
+			System.out.println(i);
+			BigDecimal diff=share.get(i).getPriceOfSecurity().subtract(sharedetail.get(i).getOpen());
+			difference.add(diff);
+			difference1.add(diff);
 		}
 		Collections.sort(difference, Collections.reverseOrder());
 		

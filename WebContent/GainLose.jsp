@@ -8,9 +8,9 @@
 				</span>
 			</div>
 			<div class="media-body clearfix">
-				<strong>Bharti Airtel</strong>
+				<strong>${max1}</strong>
 				<p class="m0">
-					<small class="text-green">+1.35%</small>
+					<small class="text-green">${maxpercentage1}</small>
 				</p>
 				<p>
 					<i class="fa fa-plus"></i> Gainer <i
@@ -28,9 +28,9 @@
 				</span>
 			</div>
 			<div class="media-body clearfix">
-				<strong>Cipla Ltd</strong>
+				<strong>${max2}</strong>
 				<p class="m0">
-					<small class="text-green">+1.05%</small>
+					<small class="text-green">${maxpercentage2}</small>
 				</p>
 				<p>
 					<i class="fa fa-plus"></i> Gainer <i
@@ -48,12 +48,12 @@
 				</span>
 			</div>
 			<div class="media-body clearfix">
-				<strong>Titan Ltd</strong>
+				<strong>${min1}</strong>
 				<p class="m0">
-					<small class="text-danger">-1.15%</small>
+					<small class="text-danger">${minpercentage1}</small>
 				</p>
 				<p>
-					<i class="fa fa-minus"></i> Gainer <i
+					<i class="fa fa-minus"></i> Loser <i
 						class="fa fa-level-down text-danger"></i>
 				</p>
 			</div>
@@ -68,12 +68,12 @@
 				</span>
 			</div>
 			<div class="media-body clearfix">
-				<strong>Eicher Motors</strong>
+				<strong>${min2}</strong>
 				<p class="m0">
-					<small class="text-danger">-2.15%</small>
+					<small class="text-danger">${minpercentage2}</small>
 				</p>
 				<p>
-					<i class="fa fa-minus"></i> Gainer <i
+					<i class="fa fa-minus"></i> Loser <i
 						class="fa fa-level-down text-danger"></i>
 				</p>
 			</div>

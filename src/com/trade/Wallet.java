@@ -42,6 +42,7 @@ public class Wallet {
 		this.amount = amount;
 	}
 	
+	
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}

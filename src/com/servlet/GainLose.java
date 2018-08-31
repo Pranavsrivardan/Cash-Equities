@@ -32,6 +32,8 @@ public class GainLose extends HttpServlet {
 		List<ShareInfo> share=market.getShareInfo();
 		ShareDetailDAO sharedetail=new ShareDetailDAO();
 		List<ShareDetail> detail=sharedetail.getShareDetail();
+		System.out.println("starting to gain");
+		System.out.println(share.size()+""+detail.size());
 		GainerLoser gainlose=new GainerLoser();
 		List<Integer> order=gainlose.comparison(share,detail);
 		request.setAttribute("max1", share.get(order.get(0)).getSecurityName());
@@ -54,6 +56,8 @@ public class GainLose extends HttpServlet {
 		request.setAttribute("maxpercentage2",  PercentageList.get(1));
 		request.setAttribute("minpercentage1",  PercentageList.get(2));
 		request.setAttribute("minpercentage2",  PercentageList.get(3));
+		
+		System.out.println("sending to gain");
 		
 		RequestDispatcher rd=request.getRequestDispatcher("/GainLose.jsp");
 		rd.include(request, response);

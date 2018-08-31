@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 
 public class ShareDetail {
 
-	private int id;
+	private long id;
 	String securityName;
 	String securityCode;
 	BigDecimal open;
@@ -15,10 +15,10 @@ public class ShareDetail {
 	Timestamp timeStamp;
 	String currency;
 	
-	public int getId() {
+	public long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 	public String getSecurityName() {

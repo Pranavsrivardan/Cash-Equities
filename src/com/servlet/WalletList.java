@@ -3,15 +3,20 @@ package com.servlet;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.osgi.application.ApplicationContext;
 
 import com.crud.UserDetailDAO;
 import com.crud.WalletCRUD;
@@ -26,80 +31,95 @@ public class WalletList extends HttpServlet {
 	String buttonType;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session=request.getSession();
-		WalletCRUD walletcrud=new WalletCRUD();
-		String userId= (String) session.getAttribute("userid");
-		List<Wallet> walletList=walletcrud.getWalletInfo(userId);
-		request.setAttribute("walletList", walletList);
-	
-		// request.setAttribute("submitval", buttonType);
-		RequestDispatcher rd=request.getRequestDispatcher("/wallet.jsp");
-		rd.forward(request, response);
+
+		doPost(request,response);
 	
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
+		System.out.println("blah blah");
 		HttpSession session=request.getSession();
 		String userId= (String) session.getAttribute("userid");
-		BigDecimal amountAdded=new BigDecimal(request.getParameter("myField"));
-		String type=(request.getParameter("type"));
+		System.out.println("checking for user"+userId);
 
-		UserDetail userDetail=new UserDetail();
-		userDetail.setUserId(userId);
+		UserDetailDAO userDetailDao=new UserDetailDAO();
+		List<UserDetail> userDetail=userDetailDao.getWalletInfo(userId);
+		WalletCRUD walletcrud1=new WalletCRUD();
+		
+		
+		List<Wallet> walletList=walletcrud1.getWalletInfo(userId);
+		request.setAttribute("walletList", walletList);
+		RequestDispatcher rd=request.getRequestDispatcher("/wallet.jsp");
+		rd.forward(request, response);
+	
+		System.out.println(userDetail);
 
-		if(type.equals("deposit")) {
-			 userDetail.setWalletBalance(userDetail.getWalletBalance().add(amountAdded));
-		}else {
-			 if(netamount.compareTo(userDetail.getWalletBalance())==1)
-				 userDetail.setWalletBalance(userDetail.getWalletBalance().subtract(amountAdded));
+		session.setAttribute("availableBalance", userDetail.get(0).getWalletBalance());
+	//	request.setAttribute("availableBalance", userDetail.get(0).getWalletBalance());
+		
+
+		System.out.println("check"+request.getParameter("amount_deposit"));
+		System.out.println("check"+request.getParameter("amount_withdraw"));
+
+		if(request.getParameter("amount_deposit")!=null) {
+		 amount=Double.parseDouble(request.getParameter("amount_deposit"));
+		 netamount = new BigDecimal(request.getParameter("netamount_deposit"));
+		 System.out.println(amount + " first!!"+netamount);
+		 request.setAttribute("amount_deposit", amount);
+		 request.setAttribute("netamount_deposit", netamount);
+		 System.out.println(userDetail.get(0).getUserId()+"  "+userDetail.get(0).getWalletBalance()+"  "+userDetail.get(0).getFullName());
+		
+		 
+		 userDetail.get(0).setWalletBalance(userDetail.get(0).getWalletBalance().add(netamount));
+		 System.out.println(userDetail.get(0).getWalletBalance());
+		 userDetailDao.addOrUpdate(userDetail.get(0));
+		 
+		 
+		 Wallet w =new Wallet(userDetail.get(0).getAccountNumber(),userDetail.get(0).getUserId(),userDetail.get(0).getFullName(),"deposit",new Timestamp(new Date().getTime()),netamount);
+		 WalletCRUD walletCrud=new WalletCRUD();
+		 walletCrud.addOrUpdate(w);
+		 
+		 List<Wallet> walletList1=walletCrud.getWalletInfo(userId);
+			request.setAttribute("walletList", walletList1);
+		 
+		request.setAttribute("availableBalance", userDetail.get(0).getWalletBalance());
+//		response.setIntHeader("Refresh", 5);
+		RequestDispatcher rd1=request.getRequestDispatcher("/wallet.jsp");
+		rd1.forward(request, response);
+	
+	
 		}
-		
-		
-		
-		
-		
-//		
-//		System.out.println("check  "+request.getParameter("submitval"));
-//	
-//		if(request.getParameter("submitval")!=null) {
-//			 buttonType=request.getParameter("submitval");
-//			 System.out.println("submit type " +buttonType);
-//			 request.setAttribute("submitval", buttonType);
-////			 RequestDispatcher rd=request.getRequestDispatcher("/amount.jsp");
-////				rd.include(request, response);
-//			
-//		}
-//		if(request.getParameter("amount")!=null) {
-//		 amount=Double.parseDouble(request.getParameter("amount"));
-//		 netamount = new BigDecimal(request.getParameter("netamount"));
-//		 System.out.println(amount + " first!!"+buttonType);
-//		 request.setAttribute("amount", amount);
-//		 request.setAttribute("netamount", netamount);
-//
-//		 if(buttonType.equals("withdraw")) {
-//			 if(netamount.compareTo(userDetail.getWalletBalance())==1)
-//				 userDetail.setWalletBalance(userDetail.getWalletBalance().subtract(netamount));
-//		 }
-//		 System.out.println(amount + " second!!");
-////		 RequestDispatcher rd=request.getRequestDispatcher("/card.jsp");
-////			rd.include(request, response);
-//			System.out.println(amount + " third!!");
-//		}
-//		
-//		 if(request.getParameter("amount")==null &&request.getParameter("submitval")==null) {
-////			 UserDetailDAO userDetail=new UserDetailDAO();
-//			 if(buttonType.equals("deposit"))
-//				 userDetail.setWalletBalance(userDetail.getWalletBalance().add(netamount));
-//			 System.out.println(amount + " fourth!!");
-//			 
-//		 }
-		 
-		 
-		
-		
-		
-		//doGet(request, response);
+		else if(request.getParameter("amount_withdraw")!=null) {
+			 amount=Double.parseDouble(request.getParameter("amount_withdraw"));
+			 netamount = new BigDecimal(request.getParameter("netamount_withdraw"));
+			 System.out.println(amount + " second!!"+netamount);
+			 request.setAttribute("amount_withdraw", amount);
+			 request.setAttribute("netamount_withdraw", netamount);
+			 if(netamount.compareTo(userDetail.get(0).getWalletBalance())==-1) {
+				 System.out.println("Inside withdraw");
+				 System.out.println(userDetail.get(0).getWalletBalance());
+				 userDetail.get(0).setWalletBalance(userDetail.get(0).getWalletBalance().subtract(netamount));
+				 System.out.println(userDetail.get(0).getWalletBalance());
+				 userDetailDao.addOrUpdate(userDetail.get(0));
+				 
+				 Wallet w =new Wallet(userDetail.get(0).getAccountNumber(),userDetail.get(0).getUserId(),userDetail.get(0).getFullName(),"withdraw",new Timestamp(new Date().getTime()),netamount);
+				 WalletCRUD walletCrud=new WalletCRUD();
+				 walletCrud.addOrUpdate(w);
+				 
+				 List<Wallet> walletList1=walletCrud.getWalletInfo(userId);
+					request.setAttribute("walletList", walletList1);
+				 request.setAttribute("availableBalance", userDetail.get(0).getWalletBalance());
+//					response.setIntHeader("Refresh", 5);
+				 RequestDispatcher rd1=request.getRequestDispatcher("/wallet.jsp");
+					rd1.forward(request, response);
+				
+			 }
+			 
+			}
+			
+
 	}
 
 }

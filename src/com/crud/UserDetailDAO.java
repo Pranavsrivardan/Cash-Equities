@@ -45,14 +45,26 @@ public class UserDetailDAO {
 		factory.close();
 	}
 	
-	public UserDetail getWalletInfo(String userId) {
-		UserDetail userDetail = null;
+	
+	public List<UserDetail> getWalletInfo(String userId) {
+		List<UserDetail> userDetail = null;
 		try {
-			userDetail=(UserDetail) session.createCriteria(UserDetail.class)
-					.add(Restrictions.like("userId", userId));
+			userDetail= session.createCriteria(UserDetail.class)
+					.add(Restrictions.like("userId", userId)).list();
 		}catch(Exception e) {
 			System.out.println(e);
 		}
 		return userDetail;
 	}
+	
+//	public UserDetail getWalletInfo(String userId) {
+//		UserDetail userDetail = null;
+//		try {
+//			userDetail= (UserDetail)session.createCriteria(UserDetail.class)
+//					.add(Restrictions.like("userId", userId));
+//		}catch(Exception e) {
+//			System.out.println(e);
+//		}
+//		return userDetail;
+//	}
 }

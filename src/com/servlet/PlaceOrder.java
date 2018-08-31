@@ -78,7 +78,7 @@ public class PlaceOrder extends HttpServlet {
 		}
 		
 		// redirect
-		RequestDispatcher dispatcher=request.getRequestDispatcher("modify.jsp");
+		RequestDispatcher dispatcher=request.getRequestDispatcher("Portfolio");
 		dispatcher.forward(request, response);
 		
 	

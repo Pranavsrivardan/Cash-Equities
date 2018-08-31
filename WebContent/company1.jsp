@@ -1,4 +1,3 @@
-<%@page import="com.trade.ShareDetail"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,38 +28,10 @@
    </style>
 
 <script>
-  function sync() {
-    var a = document.getElementById('su').value;
-    var b = document.getElementById('sa').value;
-   
-    
-    document.getElementById('st').value = a*b;
-  }
-  function sync1() {
-    var a = document.getElementById('bu').value;
-    var b = document.getElementById('bb').value;
-   
-    
-    document.getElementById('bt').value = a*b;
-  }
+    function buy(){
+    	document.getElementById("total1").value = document.getElementById("units1").value * document.getElementById("bid1").value; 
+    }
   </script>
-<style>
-table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 47%;
-}
-
-td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-}
-
-tr:nth-child(even) {
-    background-color: #dddddd;
-}
-</style>
 
 </head>
 
@@ -247,7 +218,7 @@ tr:nth-child(even) {
 
       <!--Scroll ticker -->
 
-      <iframe allowtransparency="true" id="macroaxis_stock_ticker" name="macroaxis_stock_ticker" marginheight="0" marginwidth="0" scrolling="NO" height="31px" width="100%" frameborder="0" src="ticker.jsp"></iframe>
+      <iframe allowtransparency="true" id="macroaxis_stock_ticker" name="macroaxis_stock_ticker" marginheight="0" marginwidth="0" scrolling="NO" height="31px" width="100%" frameborder="0" src="ticker.html"></iframe>
 
       <!-- ticker close-->
       <br><br>
@@ -255,79 +226,27 @@ tr:nth-child(even) {
       <section class="main-content">
              <button style="font-size:15px" type="button" class="btn btn-labeled btn-info pull-right" >
                        <span class="btn-label"><i class="fa fa-bullhorn"></i>
-  
                        </span>Available Stocks: 20000</button>
- <div class="row">
-<div class="col-md-9">
- <div class="row margin-bottom-10" style="margin-right:-16px;margin-left:-17px">
-  <div class="wallets-container card white-background">
-
-
-   <div> &nbsp;&nbsp;<label><h3>COMPANY NAME :</h3></label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><h3><%=request.getParameter("stock") %></h3></label><br/>
-   &nbsp;&nbsp;<label><h4>SYMBOL:</h4></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><%=request.getParameter("id") %></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label><h4>ISIN NO:</h4></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>${ISBN}</label></div>
-  </div>
-</div>
-
 <!-- saasaas -->
-<!-- <div class="row">
-<div class="col-md-9"> -->
-  <div class="row margin-bottom-10" style="margin-right:-17px;margin-left:-17px">
-  <div class="wallets-container card white-background">
-  <div>
-       <center> <b style="font-size:35px"> QUOTE </b></center>
-        
-  <table style="float:left">
-    <tr> 
-<th> QUANTITY </th>
-<th> PRICE</th>
-
-    </tr>
-      <c:forEach items="${buylist}" var="buyval" varStatus="status">
-
-                                             <tr>
-                                                <td>${buyval.quantity}</td>
-                                                <td>${buyval.priceOfSecurity}</td>
-                                             </tr>
-                                             </c:forEach>
-
-
-</table>
-<table style="float:right">
-    <tr> 
-<th> PRICE </th>
-<th>QUANTITY</th>
-
-    </tr>
-<c:forEach items="${selllist}" var="sellval" varStatus="status">
-
-                                             <tr class="clickable-row " data-href="index.html">
-                                                <td class="tableSmallPad">${sellval.priceOfSecurity}</td>
-                                                <td class="tableSmallPad">${sellval.quantity}</td>
-                                             </tr>
-
-                                             </c:forEach>
-
-</table>
-  </div>
-</div>
-</div> <br>
+<div class="row">
+<div class="col-md-9">
 <div class="row margin-0">
 <!-- <div class="col-lg-12"> -->
 <div class="row margin-bottom-10" style="margin-right:-5px;margin-left:-5px">
 <div class="wallets-container card white-background">
 <!-- <div class="row"> -->
 <!-- <div class="col-lg-12 col-md-12 col-sm-12 header"> -->
-
-<table style="margin-left:195px">
+<table>
 <tbody>
-
-  <tr>
-
+<tr>
 <td>
   <div class="tab" style="width:100%">
-<button class="tablinks" onclick="openCity(event, 'Tokyo')" id="defaultOpen">SELL</button>
-<button class="tablinks" onclick="openCity(event, 'Paris')">BUY</button>
-
+<button class="tablinks" onclick="openCity(event, 'London')" id="defaultOpen">About</button>
+<button class="tablinks" onclick="openCity(event, 'Paris')">Graph</button>
+<button class="tablinks" onclick="openCity(event, 'Tokyo')">Order book</button>
+<div style="float:right">
+<button class="tablinks" onclick="openCity(event, 'buy')">Buy / Sell</button>
+</div>
 </div>
 </td>
 </tr>
@@ -339,119 +258,178 @@ tr:nth-child(even) {
 
    <!-- table start -->
 
+
+      <div id="London" class="tabcontent">
+        <h3 style="padding:15px"><strong style="color:black">Name:</strong> Titan Ltd         <i style="float:right"><strong style="color:black">Website:</strong> <a href="https://www.titan.co.in" target="_blank">https://www.titan.co.in</a></i></h3> <br>
+        <b style="font-size:18px;margin-left:13px"><strong style="color:black">Market Cap:</strong> 79,279 Crores</b> <b style="float:right;font-size:18px;margin-right:80px"><strong style="color:black">Current Stock price:</strong> INR 882.05</b> <br> <br>
+      </div>
+
       <div id="Paris" class="tabcontent">
-       
-<!-- bid price -->
-                  <div class="col-lg-6" style="margin-left:180px">
-                     <div class="panel panel-default">
-                        <div class="panel-heading">Bid Price
-                           <a href="#" data-perform="panel-collapse" data-toggle="tooltip" title="Collapse Panel" class="pull-right">
-                           <em class="fa fa-minus"></em>
-                           </a>
-                        </div>
-                        <form action="PlaceOrder" method="post">
-                        <input type="hidden" name="securityCode" value="<%=request.getParameter("id")%>">
-                         <div class="pannel panel-body">
-                           <label > UNITS</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" value="" name="quantity" onkeyup="sync1()"  id="bu" >
-                                                      <div class="m-t-9">
-                              <label >BID</label>
-                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" value="" name="priceOfSecurity" onkeyup="sync1()" id="bb">
-                           </div>
-                           <div class="row">
-                              <div class="btn-group m-t-9 col-md-6 col-sm-12 col-xs-12">
-                               <select id="condition">
-                                <option name="limit">LIMIT</option>
-                                <option name="market">MARKET</option>
-
-                               </select>
-                              </div>
-                              <div class="btn-group m-t-9 col-md-6 col-sm-12 col-xs-12">
-                                  <select id="good_cancel">
-                                <option name="till">Good Till Cancelled</option>
-                                <option name="Imediate">Imediate</option>
-
-                               </select>                               </div>
-                           </div>
-                           <div class="m-t-9">
-                              <label>Total</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                              <input type="text" value="" name="atotal" onkeyup="sync1()" id="bt">
-                           </div>
-                           <div class="m-t-9">
-                              <button name="direction" value="buy" type="submit" class="btn btn-primary btn-block"><i class="fa fa-plus"></i> <b style="font-size: 15px">BUY STOCKS</b></button>
-                           </div>
-                        </div></form>
-                     </div>
-                  </div>
-                  <!-- bid price close-->
-
-
+        <div id="chartContainer"></div>
       </div>
 
       <div id="Tokyo" class="tabcontent">
-             <!-- ask price -->
-                  <div class="col-lg-6" style="margin-left:180px">
-                     <div class="panel panel-default">
-                        <div class="panel-heading">Ask Price
-                           <a href="#" data-perform="panel-collapse" data-toggle="tooltip" title="Collapse Panel" class="pull-right">
-                           <em class="fa fa-minus"></em>
-                           </a>
-                        </div>
-                      <form action="PlaceOrder" method="post">
-                       <input type="hidden" name="securityCode" value="<%=request.getParameter("id")%>">
-                        <div class="pannel panel-body">
-                           <label> UNITS</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="number" value="" name="quantity" onkeyup="sync()"  id="su">
-                                                      <div class="m-t-9">
-                              <label >ASK</label>
-                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="number" value="" name="priceOfSecurity"  id="sa" onkeyup="sync()" >
-                           </div>
-                           <div class="row">
-                              <div class="btn-group m-t-9 col-md-6 col-sm-12 col-xs-12">
-                               <select id="condition">
-                                <option name="limit">LIMIT</option>
-                                <option name="market">MARKET</option>
 
-                               </select>
-                              </div>
-                              <div class="btn-group m-t-9 col-md-6 col-sm-12 col-xs-12">
-                                  <select id="good_cancel">
-                                <option name="till">Good Till Cancelled</option>
-                                <option name="Imediate">Imediate</option>
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <div class="table-responsive">
+              <table class="table table-striped table-hover table-condensed">
+                <thead>
+                  <tr>
+                    <th>
+                      Quantity
+                    </th>
+                    <th>
+                      Price
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                       <c:forEach items="${buylist}" var="buyval" varStatus="status">
 
-                               </select>                               </div>
-                           </div>
-                           <div class="m-t-9">
-                              <label>Total</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                              <input type="number" value="" name="stotal" onkeyup="sync()" id="st">
-                           </div>
-                           <div class="m-t-9">
-                              <button name="direction" value="sell"  type="submit" class="btn btn-primary btn-block"><i class="fa fa-minus"></i> <b style="font-size: 15px">SELL STOCKS</b></button>
-                           </div>
-                        </div></form>
-                     </div>
-                  </div>
-                  <!-- ask price close -->
-        
+                                             <tr class="clickable-row " data-href="index.html">
+                                                <td class="tableSmallPad">${buyval.quantity}</td>
+                                                <td class="tableSmallPad">${buyval.priceOfSecurity}</td>
+                                             </tr>
+
+                                             </c:forEach>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div class="table-responsive">
+              <table class="table table-striped table-hover table-condensed">
+                <thead>
+                  <tr>
+                    <th>
+                      Price
+                    </th>
+                    <th>
+                      Quantity
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <c:forEach items="${selllist}" var="sellval" varStatus="status">
+
+                                             <tr class="clickable-row " data-href="index.html">
+                                                <td class="tableSmallPad">${sellval.priceOfSecurity}</td>
+                                                <td class="tableSmallPad">${sellval.quantity}</td>
+                                             </tr>
+
+                                             </c:forEach>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div id="buy" class="tabcontent">
-        
+        <!---start bid price-------->
 <div class="row">
-
 <div class="col-lg-7" style="margin-left:140px">
     <div class="panel panel-default">
+
+      <div class="panel-heading">Bid Price
+        <a href="javascript:void(0);" data-perform="panel-collapse" data-toggle="tooltip" title="" class="pull-right" data-original-title="Collapse Panel">
+               <em class="fa fa-minus"></em>
+               </a>
+      </div>
+      <div class="panel-wrapper collapse in" aria-expanded="true" style=""><div class="pannel panel-body">
+      <form action="PlaceOrder" >
+      
+      <input type="hidden" name="securityCode" value="<%=request.getParameter("id")%>">
+      
+        <label style="font-size:15px" class="col-sm-2 control-label m-t-9">Units  </label>
+        <div class="input-group col-sm-10 m-b">
+          <input type="number" id="units1" name="quantity" value="" class="form-control text-right">
+        </div>
+        <div class="m-t-9">
+          <label class="col-sm-2 control-label m-t-9">Bid</label>
+          <div class="input-group col-sm-10 m-b">
+            <input type="number" onkeyup="buy()" id="bid1" name="priceOfSecurity" value="" class="form-control text-right">
+          </div>
+        </div>
+        <div class="row">
+          <div class="btn-group m-t-9 col-md-6 col-sm-12 col-xs-12">
+            <select id="pricetype">
+               <option name="limit">LIMIT</option>
+               <option name="market">MARKET</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="m-t-9">
+          <label class="col-sm-2 control-label m-t-9">Total</label>
+          <div class="input-group col-sm-10 m-b">
+            <span class="input-group-addon"><i class="fa fa-rupee"></i></span>
+            <input type="text"  value="" class="form-control text-right" id="buy">
+          </div>
+        </div>
+        <div class="m-t-9">
+          <button name="direction" type="submit" value="total1" style="background-color:#337ab7;border-color:#2e6da4;font-size:14px" type="button" class="btn btn-primary btn-block"><i class="fa fa-plus"></i> Buy Stock</button>
+        </div>
+        </form>
+      </div>
+      
+      </div>
       
     </div>
   </div>
 
 
 
+<!---end bid price-------->
+<!-- class="col-lg-6" -->
+<!--start ask price-->
+
 <div class="col-lg-7" style="margin-left:140px">
     <div class="panel panel-default">
-      
+      <div class="panel-heading">Ask Price
+        <a href="javascript:void(0);" data-perform="panel-collapse" data-toggle="tooltip" title="" class="pull-right" data-original-title="Collapse Panel">
+               <em class="fa fa-minus"></em>
+               </a>
+      </div>
+      <form action="PlaceOrder">
+      <input type="hidden" name="securityCode" value="<%=request.getParameter("id")%>">
+      <div class="panel-wrapper collapse in" aria-expanded="true" style=""><div class="pannel panel-body">
+        <label class="col-sm-2 control-label m-t-9">Units</label>
+        <div class="input-group col-sm-10 m-b">
+          <input type="text" id="units2" value="" name="quantity" class="form-control text-right">
+        </div>
+        <div class="m-t-9">
+          <label class="col-sm-2 control-label m-t-9">Ask</label>
+          <div class="input-group m-b">
+            <input type="number" id="ask1" name="priceOfSecurity" class="form-control text-right" value="">
+          </div>
+        </div>
+        <div class="row">
+          <div class="btn-group m-t-9 col-md-6 col-sm-12 col-xs-12">
+            <select id="pricetype">
+               <option name="limit">LIMIT</option>
+               <option name="market">MARKET</option>
+            </select>
+          </div>
+        </div>
+        <div class="m-t-9">
+          <label class="col-sm-2 control-label m-t-9">Total</label>
+          <div class="input-group col-sm-10 m-b">
+            <span class="input-group-addon"><i class="fa fa-rupee"></i></span>
+            <input type="number" id="total1" value="" class="form-control text-right">
+          </div>
+        </div>
+        <div class="m-t-9">
+          <button name="direction" value="sell" type="submit" style="background-color:#337ab7;border-color:#2e6da4;font-size:14px  " type="button" class="btn btn-primary btn-block"><i class="fa fa-minus"></i> Sell Stock</button>
+        </div>
+      </div>
+      </div>
+      </form>
     </div>
   </div>
-
 <!--end ask price-->
+
 </div>
 
       </div>
@@ -474,11 +452,6 @@ tr:nth-child(even) {
            <div class="panel-heading">
               <div class="panel-title">Stock Status</div>
            </div>
-           <%
-           ShareDetail shareDetail=(ShareDetail)request.getAttribute("shareDetails");
-           System.out.print(shareDetail.getId());
-                    %>
-                    
            <div class="list-group">
               <div class="list-group-item">
                  <div class="media">
@@ -489,11 +462,11 @@ tr:nth-child(even) {
                        </span>
                     </div>
                     <div class="media-body clearfix">
-                       <strong>Current Price</strong>
+                       <strong>Closing Price</strong>
                        <p class="m0">
-                          <small class="text-green"><%=shareDetail.getOpen() %> <i class="fa fa-money"></i></small>
+                          <small class="text-green">$0.02 <i class="fa fa-money"></i></small>
                        </p>
-                       <p><i class="fa fa-inr"></i> <%=shareDetail.getOpen() %></p>
+                       <p><i class="fa fa-inr"></i> 0.00</p>
                     </div>
                  </div>
               </div>
@@ -506,11 +479,11 @@ tr:nth-child(even) {
                        </span>
                     </div>
                     <div class="media-body clearfix">
-                       <strong>Open Price</strong>
+                       <strong>24Hr Change</strong>
                        <p class="m0">
-                         <small class="text-green">${shareDetails.open } <i class="fa fa-money"></i></small>
+                         <small class="text-green">$0.02 <i class="fa fa-money"></i></small>
                        </p>
-                       <p><i class="fa fa-inr"></i> <%=shareDetail.getOpen() %></p>
+                       <p><i class="fa fa-inr"></i> $0.02</p>
                     </div>
                  </div>
               </div>
@@ -523,11 +496,11 @@ tr:nth-child(even) {
                        </span>
                     </div>
                     <div class="media-body clearfix">
-                       <strong>Low price</strong>
+                       <strong>24Hr Low</strong>
                        <p class="m0">
-                         <small class="text-green">${shareDetails.low } <i class="fa fa-money"></i></small>
+                         <small class="text-green">$0.02 <i class="fa fa-money"></i></small>
                        </p>
-                       <p><i class="fa fa-inr"></i> <%=shareDetail.getLow()%> <i class="fa fa-level-down text-danger"></i></p>
+                       <p><i class="fa fa-inr"></i> 0.00 <i class="fa fa-level-down text-danger"></i></p>
                     </div>
                  </div>
               </div>
@@ -540,9 +513,9 @@ tr:nth-child(even) {
                        </span>
                     </div>
                     <div class="media-body clearfix">
-                       <strong>High Price</strong>
+                       <strong>24Hr High</strong>
                        <p class="m0">
-                         <small class="text-green"><%=shareDetail.getHigh() %><i class="fa fa-money"></i></small>
+                         <small class="text-green">$0.02 <i class="fa fa-money"></i></small>
                        </p>
                        <p><i class="fa fa-inr"></i> 0.00 <i class="fa fa-level-up text-green"></i></p>
                     </div>

@@ -22,10 +22,10 @@ public class OrderMatching {
 		// limit order
 		List<InProgress> orderList=null;
 		if(inProgress.getDirection().equals("buy")) {
-			orderList = prioriryList.sell(inProgress.getSecurityName());
+			orderList = prioriryList.sell(inProgress.getSecurityName(),inProgress.getUserId());
 
 		}else {
-			orderList = prioriryList.buy(inProgress.getSecurityName());
+			orderList = prioriryList.buy(inProgress.getSecurityName(),inProgress.getUserId());
 		}
 
 		if(inProgress.getTradeType().equals("Limit")) {

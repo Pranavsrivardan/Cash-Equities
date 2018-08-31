@@ -1,6 +1,7 @@
 package com.servlet;
 
 import java.io.IOException;
+
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -11,10 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.crud.LoginDAO;
 import com.crud.MarketCRUD;
 import com.crud.OrderCRUD;
 import com.trade.InProgress;
-import com.trade.RandomGenerator;
 import com.trade.ShareInfo;
 
 /**
@@ -26,6 +27,10 @@ public class MarketList extends HttpServlet {
        
    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(!LoginDAO.checkForLogin(request)) {
+			response.sendRedirect("landing.jsp");
+		}
+		
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		HttpSession session=request.getSession();

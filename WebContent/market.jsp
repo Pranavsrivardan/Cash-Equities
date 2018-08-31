@@ -306,7 +306,7 @@
 						<div class="panel-heading">
 							<div class="panel-title">Gainers / Losers</div>
 						</div>
-						<jsp:include page="/gainloss" />
+						<!--<jsp:include page="/gainloss" />-->
 					</div>
 					<!-- Coin Status Ends Here -->
 					<div class="panel panel-default">

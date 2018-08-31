@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html lang="en">
 
 
@@ -51,9 +51,6 @@
   </style>
 
   <script>
-  var a;
-  var b;
-  var c;
     $(document).ready(function() {
       $("#deposit").click(function() {
         $("#add_money").fadeIn(10, function() {
@@ -62,8 +59,8 @@
                 $("#add_money4").fadeIn(10,function(){
                   $("#add_money").fadeOut(10, function() {
                      $("#submit1").click(function() {
-                    	 
-                    	 
+
+
                         $("#success").fadeIn(10,function(){
                             $("#add_money4").fadeOut(10,function(){
                                 setTimeout(function(){location.href="wallet.jsp";}, 3000);
@@ -77,7 +74,7 @@
           });
         });
       $("#withdraw").click(function() {
-         $("#add_money").fadeIn(10, function() {
+         $("#add_moneyw").fadeIn(10, function() {
            $("#wallet_history").fadeOut(10, function() {
                $("#add").click(function() {
                    $("#add_money").fadeOut(10, function() {
@@ -93,24 +90,26 @@
   </script>
   <script>
   function sync() {
-     a = document.getElementById('enter_amount').value;
+     var a = document.getElementById('enter_amount').value;
     document.getElementById('net_amount').value = a - (a * (0.02));
-    c = a - (a * (0.02));
-    document.getElementById('myField').value = c;
-  
-    
+    document.getElementById('myField').value = document.getElementById('net_amount').value;
   }
-  
+  function sync1() {
+     var b = document.getElementById('enter_amount1').value;
+    document.getElementById('net_amount1').value = b - (b * (0.02));
+    document.getElementById('myField').value = document.getElementById('net_amount').value;
+  }
+
   function clicked1(){
-	  b = "deposit";
-	  document.getElementById('type').value = b;
+	  application.setAttribute("type","deposit");
+	  document.getElementById('type').value = "deposit";
   }
-  
+
   function clicked2(){
-	  b = "withdraw";
-	  document.getElementById('type').value = b;
+	  application.setAttribute("type","withdraw");
+	  document.getElementById('type').value = "withdraw";
   }
-  
+
   </script>
 </head>
 
@@ -352,20 +351,16 @@
        <span class="inrLabel">INR</span>
        </td>
        <td style="font-size:16px;" class="ng-binding">
-       0.00
+       ${availableBalance} 
        <span class="inrLabel">INR</span>
        </td>
        <td style="font-size:25px;padding-right:10px;width:250px">
-       <form method="post" action="walletlist">
-         <input id="deposit" onClick="clicked1()" name="submitval" value="deposit" type="button" class="btn btn-primary bold deposit_button" data-toggle="modal" data-target="#DepositModal" data-max="50000" data-min="10" data-name="Credit Card" data-id="4" style="width:115px; align:center;font-size:13px;float:left">
-        <i class="fa fa-money"></i>
-        </input>
-        <input id="withdraw" onClick="clicked2()" name="submitval" value="withdraw" type="button" class="btn btn-success bold deposit_button" data-toggle="modal" data-target="#DepositModal" data-max="50000" data-min="10" data-name="Credit Card" data-id="4" style="width:115px; align:center;font-size:13px;float:right">
-       <i class="fa fa-money"></i>
-       </input>
-        <input style="display:none;" type="number" name="myField" id="myField"/>
-                     <input style="display:none;" type="number" name="type" id="type"/>
-       </form>
+         <button id="deposit" type="button" onclick="clicked1()" class="btn btn-primary bold deposit_button" data-toggle="modal" data-target="#DepositModal" data-max="50000" data-min="10" data-name="Credit Card" data-id="4" style="width:115px; align:center;font-size:13px;float:left">
+        <i class="fa fa-money"></i> DEPOSIT
+        </button>
+        <button id="withdraw" type="button" onclick="clicked2()" class="btn btn-success bold deposit_button" data-toggle="modal" data-target="#WithdrawModal" data-max="50000" data-min="10" data-name="Credit Card" data-id="4" style="width:115px; align:center;font-size:13px;float:right">
+       <i class="fa fa-money"></i> WITHDRAW
+       </button>
        </td>
        </tr>
        </tbody>
@@ -401,7 +396,7 @@
        <table class="table table-bordered table-hover table-striped">
          <thead>
            <tr>
-       
+
              <th>Date</th>
              <th>Deposit/Withdraw</th>
              <th>Amount</th>
@@ -409,13 +404,13 @@
          </thead>
         <tbody>
                                           <c:forEach items="${walletList}" var="walletval" varStatus="status">
-                                          
-                                             <tr class="clickable-row " data-href="index.html">                               
+
+                                             <tr class="clickable-row " data-href="index.html">
                                                 <td class="tableSmallPad">${walletval.timeStamp}</td>
                                                 <td class="tableSmallPad">${walletval.direction}</td>
                                                 <td class="tableSmallPad">${walletval.amount}</td>
                                              </tr>
-                                            
+
                                              </c:forEach>
                                           </tbody>
        </table>
@@ -424,10 +419,10 @@
      </div>
    </div>
  </div>
- 
+
  <!-- wallet history-->
         <!-- Add money via Credit Card -->
-        <div id="add_money" class="modal fade in" id="DepositModal" tabindex="-1" role="basic" aria-hidden="true" style="padding-right: 17px;">
+        <div id="add_money" class="modal fade in" id="DepositModal" tabindex="-1" role="basic" aria-hidden="true" style="padding-right: 17px;display:none">
           <div class="modal-dialog"> <br> <br> <br> <br> <br>
             <div class="modal-content">
               <div class="modal-header">
@@ -440,12 +435,12 @@
                   <input class="form-control abir_id" type="hidden" name="id" value="4">
                   <div class="row">
                     <div class="form-group">
-                      <label style="text-align:center;font-size:20px" class="col-md-12"><strong style="text-transform: uppercase;">ENTER AMOUNT</strong>
+                      <label style="text-align:center;font-size:20px" class="col-md-12"><strong style="text-transform: uppercase;">ENTER AMOUNT TO DEPOSIT</strong>
       <span class="abir_limits"></span>
       </label>
                       <div class="col-md-12">
                         <div class="input-group mb15">
-                          <input onkeyup="sync()" id="enter_amount" style="text-align:center" class="form-control input-lg" name="amount" type="text" autocomplete="off">
+                          <input onkeyup="sync1()" id="enter_amount1" style="text-align:center" class="form-control input-lg" name="amount_deposit" type="text" autocomplete="off">
                           <span class="input-group-addon">INR</span>
                         </div> <br>
                       </div>
@@ -455,7 +450,7 @@
       </label>
                       <div class="col-md-12">
                         <div class="input-group mb15">
-                          <input onkeyup="sync()" id="net_amount" style="text-align:center" class="form-control input-lg" name="netamount" type="text">
+                          <input onkeyup="sync1()" id="net_amount1" style="text-align:center" class="form-control input-lg" name="netamount_deposit" type="text">
                           <span class="input-group-addon">INR</span>
                         </div>
                       </div>
@@ -465,94 +460,68 @@
                 <div class="modal-footer">
                   <button style="font-size:15px" type="button" class="btn btn-default" data-dismiss="modal" onclick="location.reload()">Close</button>
                   <input style="font-size:15px" id="add" type="submit" class="btn btn-primary"></input>
+                   <input type="hidden" name="type" value=""/>
                 </div>
               </form>
             </div>
           </div>
         </div>
-  
-        <!-- CREDIT CARD FORM STARTS HERE -->
-         <form method="post" action="walletlist">
-        <div class="container" id="add_money4" style="margin-left:250px;display:none">
-          <div class="row">
-              <div class="col-xs-12 col-md-4">
-        <div class="panel panel-default credit-card-box">
-            <div class="panel-heading display-table" >
-                <div class="row display-tr" >
-                    <h3 class="panel-title display-td" >Payment Details</h3>
-                    <div class="display-td" >
-                        <img class="img-responsive pull-right" src="http://i76.imgup.net/accepted_c22e0.png">
+        <!-- add money via credit card close -->
+        <!-- another for withdraw -->
+        <div id="add_moneyw" class="modal fade in" id="WithdrawModal" tabindex="-1" role="basic" aria-hidden="true" style="padding-right: 17px;display:none;">
+          <div class="modal-dialog"> <br> <br> <br> <br> <br>
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <!-- <h4 class="modal-title">ADD MONEY VIA <b class="abir_name">Credit Card</b></h4> -->
+              </div>
+
+              <form method="post" action="walletlist">
+                <div class="modal-body">
+                  <input class="form-control abir_id" type="hidden" name="id" value="4">
+                  <div class="row">
+                    <div class="form-group">
+                      <label style="text-align:center;font-size:20px" class="col-md-12"><strong style="text-transform: uppercase;">ENTER AMOUNT TO WITHDRAW</strong>
+      <span class="abir_limits"></span>
+      </label>
+                      <div class="col-md-12">
+                        <div class="input-group mb15">
+                          <input onkeyup="sync()" id="enter_amount" style="text-align:center" class="form-control input-lg" name="amount_withdraw" type="text" autocomplete="off">
+                          <span class="input-group-addon">INR</span>
+                        </div> <br>
+                      </div>
+
+                      <label style="text-align:center;font-size:20px" class="col-md-12"><strong style="text-transform: uppercase;">NET AMOUNT </strong><i style="font-weight:100;font-size:15px">(*Brokerage applied)</i>
+      <span class="abir_limits"></span>
+      </label>
+                      <div class="col-md-12">
+                        <div class="input-group mb15">
+                          <input onkeyup="sync()" id="net_amount" style="text-align:center" class="form-control input-lg" name="netamount_withdraw" type="text">
+                          <span class="input-group-addon">INR</span>
+                        </div>
+                      </div>
                     </div>
+                  </div>
                 </div>
+                <div class="modal-footer">
+                  <button style="font-size:15px" type="button" class="btn btn-default" data-dismiss="modal" onclick="location.reload()">Close</button>
+                  <input style="font-size:15px" id="add" type="submit" class="btn btn-primary"></input>
+                   <input type="hidden" name="type" value=""/>
+                </div>
+              </form>
             </div>
-            <div class="panel-body">
-                <form role="form" id="payment-form" method="POST" action="javascript:void(0);">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="form-group">
-                                <label for="cardNumber">CARD NUMBER</label>
-                                <div class="input-group">
-                                    <input
-                                        type="tel"
-                                        class="form-control"
-                                        name="cardNumber"
-                                        placeholder="Valid Card Number"
-                                        autocomplete="cc-number"
-                                        required autofocus
-                                    />
-                                    <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-7 col-md-7">
-                            <div class="form-group">
-                                <label for="cardExpiry"><span class="hidden-xs">EXPIRATION</span><span class="visible-xs-inline"></span> DATE</label>
-                                <input
-                                    type="tel"
-                                    class="form-control"
-                                    name="cardExpiry"
-                                    placeholder="MM / YY"
-                                    autocomplete="cc-exp"
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div class="col-xs-5 col-md-5 pull-right">
-                            <div class="form-group">
-                                <label for="cardCVC">CVV CODE</label>
-                                <input
-                                    type="tel"
-                                    class="form-control"
-                                    name="cardCVC"
-                                    placeholder="CVV"
-                                    autocomplete="cc-csc"
-                                    required
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <input id="submit1" name="submit" style="padding:5px 5px" class="subscribe btn btn-success btn-lg btn-block" type="submit"></input>
-                        </div>
-                    </div>
-                    
-                   
-                    <div class="row" style="display:none;">
-                        <div class="col-xs-12">
-                            <p class="payment-errors"></p>
-                        </div>
-                    </div>
-                </form>
-            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-  </form>
-    <!-- Credit card ends here -->
+        <!-- another for withdraw close -->
+
+
+
+
+
+
+
+
+
 
       </section>
     </section>
