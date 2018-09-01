@@ -56,17 +56,9 @@
         $("#add_money").fadeIn(10, function() {
             $("#wallet_history").fadeOut(10, function() {
               $("#add").click(function() {
-                $("#add_money4").fadeIn(10,function(){
+            		 $("#success").fadeIn(10, function() {
                   $("#add_money").fadeOut(10, function() {
-                     $("#submit1").click(function() {
-
-
-                        $("#success").fadeIn(10,function(){
-                            $("#add_money4").fadeOut(10,function(){
-                                setTimeout(function(){location.href="wallet.jsp";}, 3000);
-                              });
-                            });
-                        });
+                	  $("#deposit").fadeOut(10, function() {});
                     });
                   });
                 });
@@ -76,10 +68,10 @@
       $("#withdraw").click(function() {
          $("#add_moneyw").fadeIn(10, function() {
            $("#wallet_history").fadeOut(10, function() {
-               $("#add").click(function() {
-                   $("#add_money").fadeOut(10, function() {
-                      $("#success1").fadeIn(10,function(){
-                          setTimeout(function(){location.href="wallet.jsp";}, 3000);
+               $("#add1").click(function() {
+            	  $("#successw").fadeIn(10,function(){
+                   $("#add_moneyw").fadeOut(10, function() {
+                	   $("#withdraw").fadeOut(10, function() {});
                    });
                  });
                });
@@ -118,7 +110,7 @@
   <section class="wrapper">
     <nav class="navbar navbar-default navbar-top navbar-fixed-top">
       <div class="navbar-header">
-        <a href="index.html" class="navbar-brand">
+        <a href="market" class="navbar-brand">
           <div class="brand-logo"><i> <img src="css/dbslogo.png" height="35px" width="35px" style="border-radius:50%"> </i> <b style="font-weight:700; color:#DD1414">STOCK</b>TRADER.com</div>
           <div class="brand-logo-collapsed"><i><img src="css/dbslogo.png" height="40px" width="40px" style="border-radius:50%; top:25px"></i></div>
         </a>
@@ -133,7 +125,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right mt0">
           <li class="dropdown dropdown-list">
-            <a href="" onclick="location.href='wallet.jsp'" data-toggle="dropdown" data-play="fadeIn" class="dropdown-toggle">
+            <a href="" onclick="location.href='walletlist'" data-toggle="dropdown" data-play="fadeIn" class="dropdown-toggle">
                      <strong><i class="fa fa-inr"></i> Wallet</strong>
                      </a>
           </li>
@@ -214,7 +206,7 @@
                      <em class="fa fa-user"></em>
                      </a>
             <ul class="dropdown-menu">
-              <li><a href="#">Profile</a>
+              <li><a href="profile">Profile</a>
               </li>
               <li class="divider"></li>
               <li><a href="login">Logout</a>
@@ -239,11 +231,11 @@
               </div>
             </div>
             <ul class="nav collapse">
-              <li><a onclick="location.href='index.html#open_orders'">Open Orders</a>
+              <li><a onclick="location.href='market#open_orders'">Open Orders</a>
               </li>
-              <li><a onclick="location.href='index.html#history'">Transactions History</a>
+              <li><a onclick="location.href='market#history'">Transactions History</a>
               </li>
-              <li><a onclick="location.href='index.html#market'">Market History</a>
+              <li><a onclick="location.href='market#market'">Market History</a>
               </li>
               <li>
                 <a href="javascript:void(0);">
@@ -254,33 +246,33 @@
             </ul>
           </li>
           <li class="active">
-            <a href="index.html" onclick="location.href='index.html'" title="index" data-toggle="collapse-next">
+            <a href="market" onclick="location.href='market'" title="index" data-toggle="collapse-next">
                         <em class="fa fa-home"></em>
                         <div class="label pull-right"><i class="fa fa-line-chart"></i></div>
                         <span class="item-text">Markets</span>
                      </a>
             </li>
             <li>
-              <a href="portfolio.html" title="Dashboard" class="">
+              <a href="Portfolio" title="Dashboard" class="">
                         <em class="fa fa-btc"></em>
                         <span class="item-text">Portfolio</span>
                      </a>
             </li>
             <li class="">
-              <a onclick="location.href='index.html#order_book'" title="Dashboard" class="">
+              <a onclick="location.href='market#order_book'" title="Dashboard" class="">
                         <em class="fa fa-gear"></em>
                         <span class="item-text">Order Book</span>
                      </a>
             </li>
             <li>
-              <a title="Pages" onclick="location.href='index.html#history'" href="#history">
+              <a title="Pages" onclick="location.href='market#history'" href="#history">
                      <em class="fa fa-file-text"></em>
                      <span class="item-text">My Order History</span>
                      </a>
 
             </li>
             <li>
-              <a title="Pages" href="#history">
+              <a title="Pages" href="market#history">
                      <em class="fa fa-bell"></em>
                      <span class="item-text">Transaction status</span>
                      </a>
@@ -294,21 +286,38 @@
       <section id="whole_page" class="main-content">
 
         <!-- Success message -->
-      <div id="success" class="container" style="display:none;width:50%;margin-bottom:20px">
-        <div  class="alert alert-success alert-dismissible fade in">
-          <a href="wallet.jsp" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-          <strong>Deposit Success!</strong> Happy Trading.
-        </div>
+      
+   <div id="success" style="display:none;">
+  <form method="post" action="walletlist"> 
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- dialog body -->
+      <div class="modal-body">
+        <strong>Deposit success.</strong> Happy Trading!
       </div>
+      <!-- dialog buttons -->
+      <div class="modal-footer"><input type="Submit" value="OK" class="btn btn-primary"> </div>
+    </div>
+  </div>
+  </form>
+</div>
         <!-- Success message close-->
 
         <!-- Success1 message -->
-      <div id="success1" class="container" style="display:none;width:50%;margin-bottom:20px">
-        <div  class="alert alert-success alert-dismissible fade in">
-          <a href="wallet.jsp" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-          <strong>Withdrawal Success!</strong> Happy Trading.
-        </div>
+      <div id="successw" style="display:none;">
+  <form method="post" action="walletlist"> 
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- dialog body -->
+      <div class="modal-body">
+        <strong>Withdrawal success.</strong> Happy Trading!
       </div>
+      <!-- dialog buttons -->
+      <div class="modal-footer"><input type="Submit" value="OK" class="btn btn-primary"> </div>
+    </div>
+  </div>
+  </form>
+</div>
         <!-- Success1 message close-->
 
        <div id="inr_wallet" class="row margin-0">
@@ -405,7 +414,7 @@
         <tbody>
                                           <c:forEach items="${walletList}" var="walletval" varStatus="status">
 
-                                             <tr class="clickable-row " data-href="index.html">
+                                             <tr class="clickable-row " data-href="market">
                                                 <td class="tableSmallPad">${walletval.timeStamp}</td>
                                                 <td class="tableSmallPad">${walletval.direction}</td>
                                                 <td class="tableSmallPad">${walletval.amount}</td>
@@ -430,7 +439,7 @@
                 <!-- <h4 class="modal-title">ADD MONEY VIA <b class="abir_name">Credit Card</b></h4> -->
               </div>
 
-              <form method="post" action="walletlist">
+          <!--     <form method="post" action="walletlist">  -->
                 <div class="modal-body">
                   <input class="form-control abir_id" type="hidden" name="id" value="4">
                   <div class="row">
@@ -459,10 +468,10 @@
                 </div>
                 <div class="modal-footer">
                   <button style="font-size:15px" type="button" class="btn btn-default" data-dismiss="modal" onclick="location.reload()">Close</button>
-                  <input style="font-size:15px" id="add" type="submit" class="btn btn-primary"></input>
+                  <button style="font-size:15px" id="add" class="btn btn-primary">Submit</button>
                    <input type="hidden" name="type" value=""/>
                 </div>
-              </form>
+           <!--  </form> -->
             </div>
           </div>
         </div>
@@ -476,7 +485,7 @@
                 <!-- <h4 class="modal-title">ADD MONEY VIA <b class="abir_name">Credit Card</b></h4> -->
               </div>
 
-              <form method="post" action="walletlist">
+          <!--  <form method="post" action="walletlist">  -->
                 <div class="modal-body">
                   <input class="form-control abir_id" type="hidden" name="id" value="4">
                   <div class="row">
@@ -505,10 +514,10 @@
                 </div>
                 <div class="modal-footer">
                   <button style="font-size:15px" type="button" class="btn btn-default" data-dismiss="modal" onclick="location.reload()">Close</button>
-                  <input style="font-size:15px" id="add" type="submit" class="btn btn-primary"></input>
+                  <button style="font-size:15px" id="add1" class="btn btn-primary">Submit</button>
                    <input type="hidden" name="type" value=""/>
                 </div>
-              </form>
+            <!-- </form> -->
             </div>
           </div>
         </div>
@@ -547,6 +556,7 @@
     <script type="text/javascript" src="js/payment.js"></script>
     <!--[if lt IE 8]><script src="js/excanvas.min.js"></script><![endif]-->
     <script src="js/tradify.js"></script>
+
     <script>
       $(document).ready(function() {
         // Candlestick

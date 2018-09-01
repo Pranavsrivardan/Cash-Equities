@@ -77,24 +77,29 @@ public class ShareDetailDAO {
 		Configuration conf=new Configuration();
 		conf.configure("hibernate.cfg.xml");
 		
+		List<ShareDetail> shareDetail = null;
 		// creating session
 		SessionFactory factory=conf.buildSessionFactory();
 		Session session=factory.openSession();
 		
 		// get the current hibernate session
 		Transaction t=session.beginTransaction();
-
-		Query<ShareDetail> theQuery = 
-				session.createQuery("FROM ShareDetail WHERE securityName='"+stock+"'",
-						ShareDetail.class);
 		
-		ShareDetail shareDetail = theQuery.getResultList().get(0);
+		shareDetail= session.createCriteria(ShareDetail.class)
+				 .add(Restrictions.eq("securityCode", stock))
+				 .list();	
+
+//		Query<ShareDetail> theQuery = 
+//				session.createQuery("FROM ShareDetail WHERE securityName='"+stock+"'",
+//						ShareDetail.class);
+//		
+		
 		
 		
 		// return the results
 		t.commit();
 		factory.close();
 		
-		return shareDetail;
+		return shareDetail.get(0);
 	}
 }

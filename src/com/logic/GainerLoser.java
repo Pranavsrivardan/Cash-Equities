@@ -1,6 +1,7 @@
 package com.logic;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,12 +21,13 @@ public class GainerLoser {
 		System.out.println(sharedetail.get(0).getOpen());
 		for(int i=0;i<7;i++) {
 			System.out.println(i);
+			System.out.println(share.get(i).getSecurityName()+"  "+sharedetail.get(i).getSecurityName());
+			System.out.println();
 			BigDecimal diff=share.get(i).getPriceOfSecurity().subtract(sharedetail.get(i).getOpen());
 			difference.add(diff);
 			difference1.add(diff);
 		}
-		Collections.sort(difference, Collections.reverseOrder());
-		
+		Collections.sort(difference);
 		for(int i=0;i<difference.size();i++) {
 			if(difference.get(difference.size()-1)==difference1.get(i)) {
 				ans.add(i);
@@ -61,8 +63,8 @@ public class GainerLoser {
 		BigDecimal differencePercentage;
 		BigDecimal hundred=new BigDecimal(100);
 		difference=current.subtract(start);
-	differencePercentage=(difference.divide(current)).multiply(hundred);
-    return differencePercentage;
+	//differencePercentage=(difference.divide(current,2, RoundingMode.HALF_UP)).multiply(hundred);
+    return difference;
 	}
 
 }

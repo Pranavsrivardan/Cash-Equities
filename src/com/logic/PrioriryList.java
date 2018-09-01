@@ -22,7 +22,7 @@ import com.trade.InProgress;
 
 public class PrioriryList {
 	
-	public List buyTopFive(String securityName) {
+	public List buyTopFive(String securityCode) {
 		Configuration config = new Configuration().configure("hibernate.cfg.xml");  
     	SessionFactory factory = config.buildSessionFactory();  
     	Session session = factory.openSession();  
@@ -30,14 +30,16 @@ public class PrioriryList {
         List ordersList = null;
 		
 		try {
-			
+			System.out.println(securityCode);
             transaction = session.beginTransaction();
            ordersList = session.createCriteria(InProgress.class)
-            	    .add( Restrictions.like("securityName", securityName))
-            	    .add( Restrictions.like("direction", "buy"))  
-            	    .addOrder( Order.desc("priceOfSecurity") )
+            	    .add( Restrictions.like("securityCode", securityCode))
+            	    .add( Restrictions.like("direction", "Buy")) 
+            	    .add( Restrictions.ne("status", "Exe")) 
+            	    .addOrder( Order.desc("priceOfSecurity"))
             	    .addOrder( Order.asc("timeStamp") )
-            	    .addOrder( Order.desc("quantity") )
+            	    .addOrder( Order.desc("quantity"))
+            	   
             	    .setMaxResults(5)
             	    .list();
            
@@ -58,7 +60,7 @@ public class PrioriryList {
 		return ordersList;
 	}
 
-	public List sellTopFive(String securityName) {
+	public List sellTopFive(String securityCode) {
 		
 		Configuration config = new Configuration().configure("hibernate.cfg.xml");  
     	SessionFactory factory = config.buildSessionFactory();  
@@ -70,8 +72,9 @@ public class PrioriryList {
 			
             transaction = session.beginTransaction();
              ordersList = session.createCriteria(InProgress.class)
-            		.add( Restrictions.like("securityName", securityName))
+            		.add( Restrictions.like("securityCode", securityCode))
             	    .add( Restrictions.like("direction", "sell"))
+            	    .add( Restrictions.ne("status", "Exe")) 
             	    .addOrder( Order.asc("priceOfSecurity") )
             	    .addOrder( Order.asc("timeStamp") )
             	    .addOrder( Order.desc("quantity") )
@@ -99,7 +102,7 @@ public class PrioriryList {
 	}
 	
 	
-	public List<InProgress> buy(String stock,String userId) {
+	public List<InProgress> buy(String securityCode,String userId) {
 		Configuration config = new Configuration().configure("hibernate.cfg.xml");  
     	SessionFactory factory = config.buildSessionFactory();  
     	Session session = factory.openSession();  
@@ -108,8 +111,8 @@ public class PrioriryList {
 		try {
             transaction = session.beginTransaction();
              InProgressList = session.createCriteria(InProgress.class)
-            	    .add( Restrictions.like("securityName", stock))
-            	    //.add(Restrictions.ne("userId", userId))
+            	    .add( Restrictions.like("securityCode", securityCode))
+            	    .add(Restrictions.ne("userId", userId))
             	    .add( Restrictions.like("direction", "buy"))
             	    .addOrder( Order.desc("priceOfSecurity") )
             	    .addOrder( Order.asc("timeStamp") )
@@ -129,19 +132,20 @@ public class PrioriryList {
 		return InProgressList;
 	}
 
-	public List<InProgress> sell(String stock,String userId) {
+	public List<InProgress> sell(String securityCode,String userId) {
 		
 		Configuration config = new Configuration().configure("hibernate.cfg.xml");  
     	SessionFactory factory = config.buildSessionFactory();  
     	Session session = factory.openSession();  
         Transaction transaction = null;
+        System.out.println(securityCode+" "+userId);
         List<InProgress> InProgressList=null;
 		try {
 			
             transaction = session.beginTransaction();
              InProgressList = session.createCriteria(InProgress.class)
              	    .add(Restrictions.ne("userId", userId))
-            		.add( Restrictions.like("securityName", stock))
+            		.add( Restrictions.like("securityCode", securityCode))
             	    .add( Restrictions.like("direction", "sell"))
             	    .addOrder( Order.asc("priceOfSecurity") )
             	    .addOrder( Order.asc("timeStamp") )

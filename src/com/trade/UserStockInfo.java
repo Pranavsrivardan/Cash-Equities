@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 public class UserStockInfo {
 
+	
 	private long id;
 	String userId;
 	String securityName;
@@ -11,6 +12,22 @@ public class UserStockInfo {
 	String securityType;
 	long totalQuantity;
 	BigDecimal totalPrice;
+	
+	public UserStockInfo(String userId, String securityName, String securityCode, String securityType,
+			long totalQuantity, BigDecimal totalPrice) {
+		super();
+		this.userId = userId;
+		this.securityName = securityName;
+		this.securityCode = securityCode;
+		this.securityType = securityType;
+		this.totalQuantity = totalQuantity;
+		this.totalPrice = totalPrice;
+	}
+	
+	public UserStockInfo() {
+		
+	}
+	
 	public long getId() {
 		return id;
 	}

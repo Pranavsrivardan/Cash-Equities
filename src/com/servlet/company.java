@@ -34,8 +34,8 @@ public class company extends HttpServlet {
 		String id=request.getParameter("id");
 		System.out.println("blah blah blah"+stock);
 		PrioriryList prioriryList = new PrioriryList();
-		List<InProgress> buylist= prioriryList.buyTopFive(stock);
-		List<InProgress> selllist=prioriryList.sellTopFive(stock);
+		List<InProgress> buylist= prioriryList.buyTopFive(id);
+		List<InProgress> selllist=prioriryList.sellTopFive(id);
 		
 		ShareDetailDAO shareDetailDAO = new ShareDetailDAO();
 		

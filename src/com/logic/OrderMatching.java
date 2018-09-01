@@ -8,10 +8,14 @@ import java.util.List;
 
 import com.crud.InProgressDAO;
 import com.crud.MarketCRUD;
+import com.crud.UserDetailDAO;
 import com.crud.UserHistoryDAO;
+import com.crud.UserStockInfoDAO;
 import com.trade.InProgress;
 import com.trade.ShareInfo;
+import com.trade.UserDetail;
 import com.trade.UserHistory;
+import com.trade.UserStockInfo;
 
 public class OrderMatching {
 	public boolean processOrder(InProgress inProgress) {
@@ -22,12 +26,11 @@ public class OrderMatching {
 		// limit order
 		List<InProgress> orderList=null;
 		if(inProgress.getDirection().equals("buy")) {
-			orderList = prioriryList.sell(inProgress.getSecurityName(),inProgress.getUserId());
-
+			orderList = prioriryList.sell(inProgress.getSecurityCode(),inProgress.getUserId());
 		}else {
-			orderList = prioriryList.buy(inProgress.getSecurityName(),inProgress.getUserId());
+			orderList = prioriryList.buy(inProgress.getSecurityCode(),inProgress.getUserId());
 		}
-
+		System.out.println(orderList.size());
 		if(inProgress.getTradeType().equals("Limit")) {
 			doLimitMatch(inProgress,orderList);
 		}else {
@@ -40,6 +43,9 @@ public class OrderMatching {
 		//Pranav Logic
 		InProgressDAO inProgressDAO = new InProgressDAO();
 		UserHistoryDAO userHistoryDAO = new UserHistoryDAO();
+		UserDetailDAO userdetail=new UserDetailDAO();
+		UserStockInfoDAO userstockinfo=new UserStockInfoDAO();
+		System.out.println("inside limit ");
 
 		//sell part
 		if(current.getDirection().equals("sell")) {
@@ -50,8 +56,8 @@ public class OrderMatching {
 					if(orderList.get(i).getRemainingQuantity()>=current.getRemainingQuantity()) {
 						//match done
 						BigDecimal totalPrice=orderList.get(i).getPriceOfSecurity().multiply(new BigDecimal(current.getRemainingQuantity()));
-						orderList.get(i).setRemainingQuantity(current.getRemainingQuantity());
-						current.setRemainingQuantity(current.getRemainingQuantity());
+						orderList.get(i).setRemainingQuantity(orderList.get(i).getRemainingQuantity()-current.getRemainingQuantity());
+						current.setRemainingQuantity(current.getRemainingQuantity()-current.getRemainingQuantity());
 						current.setStatus("Exe");
 						if(orderList.get(i).getRemainingQuantity()==0) {
 							orderList.get(i).setStatus("Exe");
@@ -63,7 +69,45 @@ public class OrderMatching {
 						//commit
 						inProgressDAO.addOrUpdate(current);
 						inProgressDAO.addOrUpdate(orderList.get(i));
+						
+						//wallet 
+						List<UserDetail> userseller=userdetail.getWalletInfo(current.getUserId());
+						List<UserDetail> userbuyer=userdetail.getWalletInfo(orderList.get(i).getUserId());
+						BigDecimal sellerbalance=userseller.get(0).getWalletBalance();
+						sellerbalance=sellerbalance.add(totalPrice);
+						userseller.get(0).setWalletBalance(sellerbalance);
+						BigDecimal buyerbalance=userbuyer.get(0).getWalletBalance();
+						buyerbalance=buyerbalance.subtract(totalPrice);
+						userbuyer.get(0).setWalletBalance(buyerbalance);
 
+						userdetail.addOrUpdate(userbuyer.get(0));
+						userdetail.addOrUpdate(userseller.get(0));
+						
+						//stockinfo
+						List<UserStockInfo> buyer=userstockinfo.getDetails(orderList.get(i).getUserId(),orderList.get(i).getSecurityCode());
+						if(buyer==null) {
+							UserStockInfo buyerInfo=new UserStockInfo(orderList.get(i).getUserId(),orderList.get(i).getSecurityName(),orderList.get(i).getSecurityCode(),orderList.get(i).getSecurityType(),current.getRemainingQuantity(),new BigDecimal(0.00));
+						    userstockinfo.addOrUpdate(buyerInfo);
+						}else {
+							long quant=buyer.get(0).getTotalQuantity();
+							quant+=current.getRemainingQuantity();
+							buyer.get(0).setTotalQuantity(quant);
+							userstockinfo.addOrUpdate(buyer.get(0));
+						}
+						List<UserStockInfo> seller=userstockinfo.getDetails(current.getUserId(),current.getSecurityCode());
+						if(seller==null) {
+							UserStockInfo sellerInfo=new UserStockInfo(current.getUserId(),current.getSecurityName(),current.getSecurityCode(),current.getSecurityType(),current.getRemainingQuantity(),new BigDecimal(0.00));
+						    userstockinfo.addOrUpdate(sellerInfo);
+						}else {
+							long quant=seller.get(0).getTotalQuantity();
+							quant-=current.getRemainingQuantity();
+							seller.get(0).setTotalQuantity(quant);
+							userstockinfo.addOrUpdate(seller.get(0));
+						}
+						
+						
+						
+						
 						//UserHistory Part
 						UserHistory transaction=new UserHistory(orderList.get(i).getUserId(), orderList.get(i).getOrderId(),current.getUserId(),
 								current.getOrderId(), current.getSecurityName(), current.getSecurityCode(),
@@ -72,12 +116,12 @@ public class OrderMatching {
 
 						userHistoryDAO.addOrUpdate(transaction);
 						//commited
-						break;
+						return true;
 					}else {
 						//if the stock quantity is partially available
 						BigDecimal totalPrice=orderList.get(i).getPriceOfSecurity().multiply(new BigDecimal(orderList.get(i).getRemainingQuantity()));
-						current.setRemainingQuantity(orderList.get(i).getRemainingQuantity());
-						orderList.get(i).setRemainingQuantity(orderList.get(i).getRemainingQuantity());
+						current.setRemainingQuantity(current.getRemainingQuantity()-orderList.get(i).getRemainingQuantity());
+						orderList.get(i).setRemainingQuantity(current.getRemainingQuantity()-orderList.get(i).getRemainingQuantity());
 						if(orderList.get(i).getRemainingQuantity()==0) {
 							orderList.get(i).setStatus("Exe");
 						}else {
@@ -94,6 +138,43 @@ public class OrderMatching {
 						//commit
 						inProgressDAO.addOrUpdate(current);
 						inProgressDAO.addOrUpdate(orderList.get(i));
+						
+						//wallet 
+						List<UserDetail> userseller=userdetail.getWalletInfo(current.getUserId());
+						List<UserDetail> userbuyer=userdetail.getWalletInfo(orderList.get(i).getUserId());
+						BigDecimal sellerbalance=userseller.get(0).getWalletBalance();
+						sellerbalance=sellerbalance.add(totalPrice);
+						userseller.get(0).setWalletBalance(sellerbalance);
+						BigDecimal buyerbalance=userbuyer.get(0).getWalletBalance();
+						buyerbalance=buyerbalance.subtract(totalPrice);
+						userbuyer.get(0).setWalletBalance(buyerbalance);
+
+						userdetail.addOrUpdate(userbuyer.get(0));
+						userdetail.addOrUpdate(userseller.get(0));
+						
+						//stockinfo
+						List<UserStockInfo> buyer=userstockinfo.getDetails(orderList.get(i).getUserId(),orderList.get(i).getSecurityCode());
+						if(buyer==null) {
+							UserStockInfo buyerInfo=new UserStockInfo(orderList.get(i).getUserId(),orderList.get(i).getSecurityName(),orderList.get(i).getSecurityCode(),orderList.get(i).getSecurityType(),orderList.get(i).getRemainingQuantity(),new BigDecimal(0.00));
+						    userstockinfo.addOrUpdate(buyerInfo);
+						}else {
+							long quant=buyer.get(0).getTotalQuantity();
+							quant+=orderList.get(i).getRemainingQuantity();
+							buyer.get(0).setTotalQuantity(quant);
+							userstockinfo.addOrUpdate(buyer.get(0));
+						}
+						List<UserStockInfo> seller=userstockinfo.getDetails(current.getUserId(),current.getSecurityCode());
+						if(seller==null) {
+							UserStockInfo sellerInfo=new UserStockInfo(current.getUserId(),current.getSecurityName(),current.getSecurityCode(),current.getSecurityType(),orderList.get(i).getRemainingQuantity(),new BigDecimal(0.00));
+						    userstockinfo.addOrUpdate(sellerInfo);
+						}else {
+							long quant=seller.get(0).getTotalQuantity();
+							quant-=orderList.get(i).getRemainingQuantity();
+							seller.get(0).setTotalQuantity(quant);
+							userstockinfo.addOrUpdate(seller.get(0));
+						}
+						
+						
 						//UserHistory Part
 						UserHistory transaction=new UserHistory(orderList.get(i).getUserId(), orderList.get(i).getOrderId(),current.getUserId(),
 								current.getOrderId(), current.getSecurityName(), current.getSecurityCode(),
@@ -106,16 +187,20 @@ public class OrderMatching {
 				}
 			}
 		}else {
+			System.out.println("buy order");
 			//Buy Order 
 			for(int i=0;i<orderList.size();i++) {
+				System.out.println();
 				//if seller willing to sell at low price
 				if((orderList.get(i).getPriceOfSecurity().compareTo(current.getPriceOfSecurity())<=0)) {
+					System.out.println("value is high");
 					// if quantity available is greater
 					if(orderList.get(i).getRemainingQuantity()>=current.getRemainingQuantity()) {
+						System.out.println("match done");
 						//match done
 						BigDecimal totalPrice=current.getPriceOfSecurity().multiply(new BigDecimal(current.getRemainingQuantity()));
-						orderList.get(i).setRemainingQuantity(current.getRemainingQuantity());
-						current.setRemainingQuantity(current.getRemainingQuantity());
+						orderList.get(i).setRemainingQuantity(orderList.get(i).getRemainingQuantity()-current.getRemainingQuantity());
+						current.setRemainingQuantity(current.getRemainingQuantity()-current.getRemainingQuantity());
 						current.setStatus("Exe");
 						if(orderList.get(i).getRemainingQuantity()==0) {
 							orderList.get(i).setStatus("Exe");
@@ -128,6 +213,41 @@ public class OrderMatching {
 						//commit
 						inProgressDAO.addOrUpdate(current);
 						inProgressDAO.addOrUpdate(orderList.get(i));
+						
+						//wallet 
+						List<UserDetail> userbuyer=userdetail.getWalletInfo(current.getUserId());
+						List<UserDetail> userseller=userdetail.getWalletInfo(orderList.get(i).getUserId());
+						BigDecimal sellerbalance=userseller.get(0).getWalletBalance();
+						sellerbalance=sellerbalance.add(totalPrice);
+						userseller.get(0).setWalletBalance(sellerbalance);
+						BigDecimal buyerbalance=userbuyer.get(0).getWalletBalance();
+						buyerbalance=buyerbalance.subtract(totalPrice);
+						userbuyer.get(0).setWalletBalance(buyerbalance);
+
+						userdetail.addOrUpdate(userbuyer.get(0));
+						userdetail.addOrUpdate(userseller.get(0));
+						
+						//stockinfo
+						List<UserStockInfo> seller=userstockinfo.getDetails(orderList.get(i).getUserId(),orderList.get(i).getSecurityCode());
+						List<UserStockInfo> buyer=userstockinfo.getDetails(current.getUserId(),current.getSecurityCode());
+						if(buyer==null) {
+							UserStockInfo buyerInfo=new UserStockInfo(current.getUserId(),current.getSecurityName(),current.getSecurityCode(),current.getSecurityType(),current.getRemainingQuantity(),new BigDecimal(0.00));
+						    userstockinfo.addOrUpdate(buyerInfo);
+						}else {
+							long quant=buyer.get(0).getTotalQuantity();
+							quant+=current.getRemainingQuantity();
+							buyer.get(0).setTotalQuantity(quant);
+							userstockinfo.addOrUpdate(buyer.get(0));
+						}
+						if(seller==null) {
+						    UserStockInfo sellerInfo=new UserStockInfo(orderList.get(i).getUserId(),orderList.get(i).getSecurityName(),orderList.get(i).getSecurityCode(),orderList.get(i).getSecurityType(),orderList.get(i).getRemainingQuantity(),new BigDecimal(0.00));
+						    userstockinfo.addOrUpdate(sellerInfo);
+						}else {
+							long quant=seller.get(0).getTotalQuantity();
+							quant-=orderList.get(i).getRemainingQuantity();
+							seller.get(0).setTotalQuantity(quant);
+							userstockinfo.addOrUpdate(seller.get(0));
+						}
 
 						//UserHistory Part
 						UserHistory transaction=new UserHistory(current.getUserId(),
@@ -137,12 +257,14 @@ public class OrderMatching {
 
 						userHistoryDAO.addOrUpdate(transaction);
 						//commited
-						break;
+						
+						return true;
+						
 					}else {
 						//if the stock quantity is partially available
 						BigDecimal totalPrice=current.getPriceOfSecurity().multiply(new BigDecimal(orderList.get(i).getRemainingQuantity()));
-						current.setRemainingQuantity(orderList.get(i).getRemainingQuantity());
-						orderList.get(i).setRemainingQuantity(orderList.get(i).getRemainingQuantity());
+						current.setRemainingQuantity(current.getRemainingQuantity()-orderList.get(i).getRemainingQuantity());
+						orderList.get(i).setRemainingQuantity(orderList.get(i).getRemainingQuantity()-orderList.get(i).getRemainingQuantity());
 						if(orderList.get(i).getRemainingQuantity()==0) {
 							orderList.get(i).setStatus("Exe");
 						}else {
@@ -159,6 +281,45 @@ public class OrderMatching {
 						//commit
 						inProgressDAO.addOrUpdate(current);
 						inProgressDAO.addOrUpdate(orderList.get(i));
+						
+						//wallet 
+						List<UserDetail> userseller=userdetail.getWalletInfo(current.getUserId());
+						List<UserDetail> userbuyer=userdetail.getWalletInfo(orderList.get(i).getUserId());
+						BigDecimal sellerbalance=userseller.get(0).getWalletBalance();
+						sellerbalance=sellerbalance.add(totalPrice);
+						userseller.get(0).setWalletBalance(sellerbalance);
+						BigDecimal buyerbalance=userbuyer.get(0).getWalletBalance();
+						buyerbalance=buyerbalance.subtract(totalPrice);
+						userbuyer.get(0).setWalletBalance(buyerbalance);
+
+						userdetail.addOrUpdate(userbuyer.get(0));
+						userdetail.addOrUpdate(userseller.get(0));
+						
+						//stockinfo
+						List<UserStockInfo> seller=userstockinfo.getDetails(orderList.get(i).getUserId(),orderList.get(i).getSecurityCode());
+						List<UserStockInfo> buyer=userstockinfo.getDetails(current.getUserId(),current.getSecurityCode());
+
+						if(buyer==null) {
+							UserStockInfo buyerInfo=new UserStockInfo(current.getUserId(),current.getSecurityName(),current.getSecurityCode(),current.getSecurityType(),orderList.get(i).getRemainingQuantity(),new BigDecimal(0.00));
+						    userstockinfo.addOrUpdate(buyerInfo);
+						}else {
+							long quant=buyer.get(0).getTotalQuantity();
+							quant+=orderList.get(i).getRemainingQuantity();
+							buyer.get(0).setTotalQuantity(quant);
+							userstockinfo.addOrUpdate(buyer.get(0));
+						}
+						if(seller==null) {
+							
+						    UserStockInfo sellerInfo=new UserStockInfo(orderList.get(i).getUserId(),orderList.get(i).getSecurityName(),orderList.get(i).getSecurityCode(),orderList.get(i).getSecurityType(),orderList.get(i).getRemainingQuantity(),new BigDecimal(0.00));
+						    userstockinfo.addOrUpdate(sellerInfo);
+						}else {
+							long quant=seller.get(0).getTotalQuantity();
+							quant-=orderList.get(i).getRemainingQuantity();
+							seller.get(0).setTotalQuantity(quant);
+							userstockinfo.addOrUpdate(seller.get(0));
+						}
+						
+						
 						//UserHistory Part
 						UserHistory transaction=new UserHistory(orderList.get(i).getUserId(), orderList.get(i).getOrderId(),current.getUserId(),
 								current.getOrderId(), current.getSecurityName(), current.getSecurityCode(),
@@ -278,6 +439,8 @@ public class OrderMatching {
 	public boolean doMarketOrder(InProgress current,List<InProgress> orderList) {
 		InProgressDAO inProgressDAO=new InProgressDAO();
 		UserHistoryDAO userHistoryDAO=new UserHistoryDAO();
+		UserDetailDAO userdetail=new UserDetailDAO();
+		UserStockInfoDAO userstockinfo=new UserStockInfoDAO();
 		MarketCRUD market=new MarketCRUD();
 		ShareInfo share=new ShareInfo();
 
@@ -298,6 +461,41 @@ public class OrderMatching {
 				inProgressDAO.addOrUpdate(orderList.get(i));
 
 				if(current.getDirection().equals("buy")) {
+					//wallet 
+					List<UserDetail> userbuyer=userdetail.getWalletInfo(current.getUserId());
+					List<UserDetail> userseller=userdetail.getWalletInfo(orderList.get(i).getUserId());
+					BigDecimal sellerbalance=userseller.get(0).getWalletBalance();
+					sellerbalance=sellerbalance.add(totalPrice);
+					userseller.get(0).setWalletBalance(sellerbalance);
+					BigDecimal buyerbalance=userbuyer.get(0).getWalletBalance();
+					buyerbalance=buyerbalance.subtract(totalPrice);
+					userbuyer.get(0).setWalletBalance(buyerbalance);
+
+					userdetail.addOrUpdate(userbuyer.get(0));
+					userdetail.addOrUpdate(userseller.get(0));
+					
+					//stockinfo
+					List<UserStockInfo> seller=userstockinfo.getDetails(orderList.get(i).getUserId(),orderList.get(i).getSecurityCode());
+					List<UserStockInfo> buyer=userstockinfo.getDetails(current.getUserId(),current.getSecurityCode());
+					if(buyer==null) {
+						UserStockInfo buyerInfo=new UserStockInfo(current.getUserId(),current.getSecurityName(),current.getSecurityCode(),current.getSecurityType(),current.getRemainingQuantity(),new BigDecimal(0.00));
+					    userstockinfo.addOrUpdate(buyerInfo);
+					}else {
+						long quant=buyer.get(0).getTotalQuantity();
+						quant+=current.getRemainingQuantity();
+						buyer.get(0).setTotalQuantity(quant);
+						userstockinfo.addOrUpdate(buyer.get(0));
+					}
+					if(seller==null) {
+					    UserStockInfo sellerInfo=new UserStockInfo(orderList.get(i).getUserId(),orderList.get(i).getSecurityName(),orderList.get(i).getSecurityCode(),orderList.get(i).getSecurityType(),orderList.get(i).getRemainingQuantity(),new BigDecimal(0.00));
+					    userstockinfo.addOrUpdate(sellerInfo);
+					}else {
+						long quant=seller.get(0).getTotalQuantity();
+						quant-=orderList.get(i).getRemainingQuantity();
+						seller.get(0).setTotalQuantity(quant);
+						userstockinfo.addOrUpdate(seller.get(0));
+					}
+
 					UserHistory userHistory=
 							new UserHistory( current.getUserId(),current.getOrderId(),orderList.get(i).getUserId(),
 									orderList.get(i).getOrderId(), current.getSecurityName(), current.getSecurityCode(),
@@ -306,6 +504,40 @@ public class OrderMatching {
 
 					userHistoryDAO.addOrUpdate(userHistory);
 				}else {
+					//wallet 
+					List<UserDetail> userseller=userdetail.getWalletInfo(current.getUserId());
+					List<UserDetail> userbuyer=userdetail.getWalletInfo(orderList.get(i).getUserId());
+					BigDecimal sellerbalance=userseller.get(0).getWalletBalance();
+					sellerbalance=sellerbalance.add(totalPrice);
+					userseller.get(0).setWalletBalance(sellerbalance);
+					BigDecimal buyerbalance=userbuyer.get(0).getWalletBalance();
+					buyerbalance=buyerbalance.subtract(totalPrice);
+					userbuyer.get(0).setWalletBalance(buyerbalance);
+
+					userdetail.addOrUpdate(userbuyer.get(0));
+					userdetail.addOrUpdate(userseller.get(0));
+					
+					//stockinfo
+					List<UserStockInfo> buyer=userstockinfo.getDetails(orderList.get(i).getUserId(),orderList.get(i).getSecurityCode());
+					if(buyer==null) {
+						UserStockInfo buyerInfo=new UserStockInfo(orderList.get(i).getUserId(),orderList.get(i).getSecurityName(),orderList.get(i).getSecurityCode(),orderList.get(i).getSecurityType(),current.getRemainingQuantity(),new BigDecimal(0.00));
+					    userstockinfo.addOrUpdate(buyerInfo);
+					}else {
+						long quant=buyer.get(0).getTotalQuantity();
+						quant+=current.getRemainingQuantity();
+						buyer.get(0).setTotalQuantity(quant);
+						userstockinfo.addOrUpdate(buyer.get(0));
+					}
+					List<UserStockInfo> seller=userstockinfo.getDetails(current.getUserId(),current.getSecurityCode());
+					if(seller==null) {
+						UserStockInfo sellerInfo=new UserStockInfo(current.getUserId(),current.getSecurityName(),current.getSecurityCode(),current.getSecurityType(),current.getRemainingQuantity(),new BigDecimal(0.00));
+					    userstockinfo.addOrUpdate(sellerInfo);
+					}else {
+						long quant=seller.get(0).getTotalQuantity();
+						quant-=current.getRemainingQuantity();
+						seller.get(0).setTotalQuantity(quant);
+						userstockinfo.addOrUpdate(seller.get(0));
+					}
 					UserHistory userHistory=
 							new UserHistory(orderList.get(i).getUserId(), orderList.get(i).getOrderId(), current.getUserId(),
 									current.getOrderId(), current.getSecurityName(), current.getSecurityCode(),
@@ -331,6 +563,41 @@ public class OrderMatching {
 				inProgressDAO.addOrUpdate(orderList.get(i));
 
 				if(current.getDirection().equals("buy")) {
+					//wallet 
+					List<UserDetail> userbuyer=userdetail.getWalletInfo(current.getUserId());
+					List<UserDetail> userseller=userdetail.getWalletInfo(orderList.get(i).getUserId());
+					BigDecimal sellerbalance=userseller.get(0).getWalletBalance();
+					sellerbalance=sellerbalance.add(totalPrice);
+					userseller.get(0).setWalletBalance(sellerbalance);
+					BigDecimal buyerbalance=userbuyer.get(0).getWalletBalance();
+					buyerbalance=buyerbalance.subtract(totalPrice);
+					userbuyer.get(0).setWalletBalance(buyerbalance);
+
+					userdetail.addOrUpdate(userbuyer.get(0));
+					userdetail.addOrUpdate(userseller.get(0));
+					
+					//stockinfo
+					List<UserStockInfo> seller=userstockinfo.getDetails(orderList.get(i).getUserId(),orderList.get(i).getSecurityCode());
+					List<UserStockInfo> buyer=userstockinfo.getDetails(current.getUserId(),current.getSecurityCode());
+					if(buyer==null) {
+						UserStockInfo buyerInfo=new UserStockInfo(current.getUserId(),current.getSecurityName(),current.getSecurityCode(),current.getSecurityType(),current.getRemainingQuantity(),new BigDecimal(0.00));
+					    userstockinfo.addOrUpdate(buyerInfo);
+					}else {
+						long quant=buyer.get(0).getTotalQuantity();
+						quant+=current.getRemainingQuantity();
+						buyer.get(0).setTotalQuantity(quant);
+						userstockinfo.addOrUpdate(buyer.get(0));
+					}
+					if(seller==null) {
+					    UserStockInfo sellerInfo=new UserStockInfo(orderList.get(i).getUserId(),orderList.get(i).getSecurityName(),orderList.get(i).getSecurityCode(),orderList.get(i).getSecurityType(),orderList.get(i).getRemainingQuantity(),new BigDecimal(0.00));
+					    userstockinfo.addOrUpdate(sellerInfo);
+					}else {
+						long quant=seller.get(0).getTotalQuantity();
+						quant-=orderList.get(i).getRemainingQuantity();
+						seller.get(0).setTotalQuantity(quant);
+						userstockinfo.addOrUpdate(seller.get(0));
+					}
+
 					UserHistory userHistory=
 							new UserHistory( current.getUserId(),current.getOrderId(),orderList.get(i).getUserId(),
 									orderList.get(i).getOrderId(), current.getSecurityName(), current.getSecurityCode(),
@@ -339,6 +606,40 @@ public class OrderMatching {
 
 					userHistoryDAO.addOrUpdate(userHistory);
 				}else {
+					//wallet 
+					List<UserDetail> userseller=userdetail.getWalletInfo(current.getUserId());
+					List<UserDetail> userbuyer=userdetail.getWalletInfo(orderList.get(i).getUserId());
+					BigDecimal sellerbalance=userseller.get(0).getWalletBalance();
+					sellerbalance=sellerbalance.add(totalPrice);
+					userseller.get(0).setWalletBalance(sellerbalance);
+					BigDecimal buyerbalance=userbuyer.get(0).getWalletBalance();
+					buyerbalance=buyerbalance.subtract(totalPrice);
+					userbuyer.get(0).setWalletBalance(buyerbalance);
+
+					userdetail.addOrUpdate(userbuyer.get(0));
+					userdetail.addOrUpdate(userseller.get(0));
+					
+					//stockinfo
+					List<UserStockInfo> buyer=userstockinfo.getDetails(orderList.get(i).getUserId(),orderList.get(i).getSecurityCode());
+					if(buyer==null) {
+						UserStockInfo buyerInfo=new UserStockInfo(orderList.get(i).getUserId(),orderList.get(i).getSecurityName(),orderList.get(i).getSecurityCode(),orderList.get(i).getSecurityType(),current.getRemainingQuantity(),new BigDecimal(0.00));
+					    userstockinfo.addOrUpdate(buyerInfo);
+					}else {
+						long quant=buyer.get(0).getTotalQuantity();
+						quant+=current.getRemainingQuantity();
+						buyer.get(0).setTotalQuantity(quant);
+						userstockinfo.addOrUpdate(buyer.get(0));
+					}
+					List<UserStockInfo> seller=userstockinfo.getDetails(current.getUserId(),current.getSecurityCode());
+					if(seller==null) {
+						UserStockInfo sellerInfo=new UserStockInfo(current.getUserId(),current.getSecurityName(),current.getSecurityCode(),current.getSecurityType(),current.getRemainingQuantity(),new BigDecimal(0.00));
+					    userstockinfo.addOrUpdate(sellerInfo);
+					}else {
+						long quant=seller.get(0).getTotalQuantity();
+						quant-=current.getRemainingQuantity();
+						seller.get(0).setTotalQuantity(quant);
+						userstockinfo.addOrUpdate(seller.get(0));
+					}
 					UserHistory userHistory=
 							new UserHistory(orderList.get(i).getUserId(), orderList.get(i).getOrderId(), current.getUserId(),
 									current.getOrderId(), current.getSecurityName(), current.getSecurityCode(),
@@ -364,6 +665,43 @@ public class OrderMatching {
 				inProgressDAO.addOrUpdate(orderList.get(i));
 
 				if(current.getDirection().equals("buy")) {
+					
+					//wallet 
+					List<UserDetail> userseller=userdetail.getWalletInfo(current.getUserId());
+					List<UserDetail> userbuyer=userdetail.getWalletInfo(orderList.get(i).getUserId());
+					BigDecimal sellerbalance=userseller.get(0).getWalletBalance();
+					sellerbalance=sellerbalance.add(totalPrice);
+					userseller.get(0).setWalletBalance(sellerbalance);
+					BigDecimal buyerbalance=userbuyer.get(0).getWalletBalance();
+					buyerbalance=buyerbalance.subtract(totalPrice);
+					userbuyer.get(0).setWalletBalance(buyerbalance);
+
+					userdetail.addOrUpdate(userbuyer.get(0));
+					userdetail.addOrUpdate(userseller.get(0));
+					
+					//stockinfo
+					List<UserStockInfo> seller=userstockinfo.getDetails(orderList.get(i).getUserId(),orderList.get(i).getSecurityCode());
+					List<UserStockInfo> buyer=userstockinfo.getDetails(current.getUserId(),current.getSecurityCode());
+
+					if(buyer==null) {
+						UserStockInfo buyerInfo=new UserStockInfo(current.getUserId(),current.getSecurityName(),current.getSecurityCode(),current.getSecurityType(),orderList.get(i).getRemainingQuantity(),new BigDecimal(0.00));
+					    userstockinfo.addOrUpdate(buyerInfo);
+					}else {
+						long quant=buyer.get(0).getTotalQuantity();
+						quant+=orderList.get(i).getRemainingQuantity();
+						buyer.get(0).setTotalQuantity(quant);
+						userstockinfo.addOrUpdate(buyer.get(0));
+					}
+					if(seller==null) {
+						
+					    UserStockInfo sellerInfo=new UserStockInfo(orderList.get(i).getUserId(),orderList.get(i).getSecurityName(),orderList.get(i).getSecurityCode(),orderList.get(i).getSecurityType(),orderList.get(i).getRemainingQuantity(),new BigDecimal(0.00));
+					    userstockinfo.addOrUpdate(sellerInfo);
+					}else {
+						long quant=seller.get(0).getTotalQuantity();
+						quant-=orderList.get(i).getRemainingQuantity();
+						seller.get(0).setTotalQuantity(quant);
+						userstockinfo.addOrUpdate(seller.get(0));
+					}
 					UserHistory userHistory=
 							new UserHistory( current.getUserId(),current.getOrderId(),orderList.get(i).getUserId(),
 									orderList.get(i).getOrderId(), current.getSecurityName(), current.getSecurityCode(),
@@ -372,6 +710,40 @@ public class OrderMatching {
 
 					userHistoryDAO.addOrUpdate(userHistory);
 				}else {
+					//wallet 
+					List<UserDetail> userseller=userdetail.getWalletInfo(current.getUserId());
+					List<UserDetail> userbuyer=userdetail.getWalletInfo(orderList.get(i).getUserId());
+					BigDecimal sellerbalance=userseller.get(0).getWalletBalance();
+					sellerbalance=sellerbalance.add(totalPrice);
+					userseller.get(0).setWalletBalance(sellerbalance);
+					BigDecimal buyerbalance=userbuyer.get(0).getWalletBalance();
+					buyerbalance=buyerbalance.subtract(totalPrice);
+					userbuyer.get(0).setWalletBalance(buyerbalance);
+
+					userdetail.addOrUpdate(userbuyer.get(0));
+					userdetail.addOrUpdate(userseller.get(0));
+					
+					//stockinfo
+					List<UserStockInfo> buyer=userstockinfo.getDetails(orderList.get(i).getUserId(),orderList.get(i).getSecurityCode());
+					if(buyer==null) {
+						UserStockInfo buyerInfo=new UserStockInfo(orderList.get(i).getUserId(),orderList.get(i).getSecurityName(),orderList.get(i).getSecurityCode(),orderList.get(i).getSecurityType(),orderList.get(i).getRemainingQuantity(),new BigDecimal(0.00));
+					    userstockinfo.addOrUpdate(buyerInfo);
+					}else {
+						long quant=buyer.get(0).getTotalQuantity();
+						quant+=orderList.get(i).getRemainingQuantity();
+						buyer.get(0).setTotalQuantity(quant);
+						userstockinfo.addOrUpdate(buyer.get(0));
+					}
+					List<UserStockInfo> seller=userstockinfo.getDetails(current.getUserId(),current.getSecurityCode());
+					if(seller==null) {
+						UserStockInfo sellerInfo=new UserStockInfo(current.getUserId(),current.getSecurityName(),current.getSecurityCode(),current.getSecurityType(),orderList.get(i).getRemainingQuantity(),new BigDecimal(0.00));
+					    userstockinfo.addOrUpdate(sellerInfo);
+					}else {
+						long quant=seller.get(0).getTotalQuantity();
+						quant-=orderList.get(i).getRemainingQuantity();
+						seller.get(0).setTotalQuantity(quant);
+						userstockinfo.addOrUpdate(seller.get(0));
+					}
 					UserHistory userHistory=
 							new UserHistory(orderList.get(i).getUserId(), orderList.get(i).getOrderId(), current.getUserId(),
 									current.getOrderId(), current.getSecurityName(), current.getSecurityCode(),

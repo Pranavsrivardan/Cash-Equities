@@ -68,7 +68,7 @@ tr:nth-child(even) {
   <section class="wrapper">
     <nav class="navbar navbar-default navbar-top navbar-fixed-top">
       <div class="navbar-header">
-        <a href="index.html" class="navbar-brand">
+        <a href="market" class="navbar-brand">
           <div class="brand-logo"><i> <img src="css/dbslogo.png" height="35px" width="35px" style="border-radius:50%"> </i> <b style="font-weight:700; color:#DD1414">STOCK</b>TRADER.com</div>
           <div class="brand-logo-collapsed"><i><img src="css/dbslogo.png" height="40px" width="40px" style="border-radius:50%; top:25px"></i></div>
         </a>
@@ -83,7 +83,7 @@ tr:nth-child(even) {
         </ul>
         <ul class="nav navbar-nav navbar-right mt0">
           <li class="dropdown dropdown-list">
-            <a href="wallet.html" data-toggle="dropdown" data-play="fadeIn" class="dropdown-toggle">
+            <a href="walletlist" data-toggle="dropdown" data-play="fadeIn" class="dropdown-toggle">
                      <strong><i class="fa fa-inr"></i> Wallet</strong>
                      </a>
 
@@ -165,10 +165,10 @@ tr:nth-child(even) {
                      <em class="fa fa-user"></em>
                      </a>
         <ul class="dropdown-menu">
-          <li><a href="#">Profile</a>
+          <li><a href="profile">Profile</a>
           </li>
           <li class="divider"></li>
-          <li><a href="landing.html">Logout</a>
+          <li><a href="login">Logout</a>
           </li>
         </ul>
       </li>
@@ -190,11 +190,11 @@ tr:nth-child(even) {
               </div>
             </div>
             <ul class="nav collapse">
-              <li><a href="#open_orders">Open Orders</a>
+              <li><a href="market#open_orders">Open Orders</a>
               </li>
-              <li><a href="#history">Transactions History</a>
+              <li><a href="market#history">Transactions History</a>
               </li>
-              <li><a href="#market">Market History</a>
+              <li><a href="market#market">Market History</a>
               </li>
               <li>
                 <a href="javascript:void(0);">
@@ -205,33 +205,33 @@ tr:nth-child(even) {
             </ul>
           </li>
           <li class="active">
-            <a href="index.html" onclick="location.href='index.html'" title="index" data-toggle="collapse-next">
+            <a href="markets" onclick="location.href='index.html'" title="index" data-toggle="collapse-next">
                         <em class="fa fa-home"></em>
                         <div class="label pull-right"><i class="fa fa-line-chart"></i></div>
                         <span class="item-text">Markets</span>
                      </a>
             </li>
             <li>
-              <a href="portfolio.html" title="Dashboard" class="">
+              <a href="Portfolio" title="Dashboard" class="">
                         <em class="fa fa-btc"></em>
                         <span class="item-text">Portfolio</span>
                      </a>
             </li>
             <li class="">
-              <a href="#order_book" title="Dashboard" class="">
+              <a href="market#order_book" title="Dashboard" class="">
                         <em class="fa fa-gear"></em>
                         <span class="item-text">Order Book</span>
                      </a>
             </li>
             <li>
-              <a title="Pages" href="#history">
+              <a title="Pages" href="market#history">
                      <em class="fa fa-file-text"></em>
                      <span class="item-text">My Order History</span>
                      </a>
 
             </li>
             <li>
-              <a title="Pages" href="#history">
+              <a title="Pages" href="market#history">
                      <em class="fa fa-bell"></em>
                      <span class="item-text">Transaction status</span>
                      </a>
@@ -247,7 +247,7 @@ tr:nth-child(even) {
 
       <!--Scroll ticker -->
 
-      <iframe allowtransparency="true" id="macroaxis_stock_ticker" name="macroaxis_stock_ticker" marginheight="0" marginwidth="0" scrolling="NO" height="31px" width="100%" frameborder="0" src="ticker.jsp"></iframe>
+      <iframe allowtransparency="true" id="macroaxis_stock_ticker" name="macroaxis_stock_ticker" marginheight="0" marginwidth="0" scrolling="NO" height="31px" width="100%" frameborder="0" src="ticker.html"></iframe>
 
       <!-- ticker close-->
       <br><br>

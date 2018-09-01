@@ -42,7 +42,7 @@
 	<section class="wrapper"> <nav
 		class="navbar navbar-default navbar-top navbar-fixed-top">
 	<div class="navbar-header">
-		<a href="index.html" class="navbar-brand">
+		<a href="market" class="navbar-brand">
 			<div class="brand-logo">
 				<i> <img src="css/dbslogo.png" height="35px" width="35px"
 					style="border-radius: 50%">
@@ -138,7 +138,7 @@
 					class="fa fa-user"></em>
 			</a>
 				<ul class="dropdown-menu">
-					<li><a href="#">Profile</a></li>
+					<li><a href="profile">Profile</a></li>
 					<li class="divider"></li>
 					<li><a href="login">Logout</a></li>
 				</ul></li>
@@ -172,14 +172,14 @@
 				</a></li>
 			</ul>
 		</li>
-		<li class="active"><a href="index.html"
-			onclick="location.href='index.html'" title="index"
+		<li class="active"><a href="market"
+			onclick="location.href='market'" title="index"
 			data-toggle="collapse-next"> <em class="fa fa-home"></em>
 				<div class="label pull-right">
 					<i class="fa fa-line-chart"></i>
 				</div> <span class="item-text">Markets</span>
 		</a></li>
-		<li><a href="portfolio.html" title="Dashboard" class=""> <em
+		<li><a href="Portfolio" title="Dashboard" class=""> <em
 				class="fa fa-btc"></em> <span class="item-text">Portfolio</span>
 		</a></li>
 		<li class=""><a href="#order_book" title="Dashboard" class="">
@@ -198,7 +198,7 @@
 		allowtransparency="true" id="macroaxis_stock_ticker"
 		name="macroaxis_stock_ticker" marginheight="0" marginwidth="0"
 		scrolling="NO" height="31px" width="100%" frameborder="0"
-		src="ticker.jsp"></iframe> <!--<jsp:include page="/ticker" />--> <!-- ticker close-->
+		src="ticker.html"></iframe> <!--<jsp:include page="/ticker" />--> <!-- ticker close-->
 
 	<section class="main-content">
 
@@ -214,10 +214,10 @@
 							<div class="row row-table row-flush">
 								<div class="col-xs-12">
 									<p class="mb0">
-										$759,781,417.92 <em class="fa fa-level-up"> </em>
+										<span class="fa fa-inr">759,781</span> <em class="fa fa-level-up"> </em>
 									</p>
 									<h4 class="m0">Market Cap</h4>
-									<span class="m-t-10"><i class="fa fa-dollar"></i> Total
+									<span class="m-t-10"><i class="fa fa-inr"></i> Total
 										Market Capital </span>
 								</div>
 							</div>
@@ -231,10 +231,10 @@
 							<div class="row row-table row-flush">
 								<div class="col-xs-12">
 									<p class="mb0">
-										$1,947,201.24 <em class="fa fa-level-down"></em>
+										<span class="fa fa-inr">1,947</span> <em class="fa fa-level-down"></em>
 									</p>
 									<h4 class="m0">Trade Volume</h4>
-									<span class="f-left m-t-10"> <i class="fa fa-dollar"></i>
+									<span class="f-left m-t-10"> <i class="fa fa-inr"></i>
 										24h Trade Volume
 									</span>
 								</div>
@@ -249,12 +249,12 @@
 							<div class="row row-table row-flush">
 								<div class="col-xs-12">
 									<p class="mb0">
-										32.4 Billions <em class="fa fa-refresh"></em>
+										324 <em class="fa fa-refresh"></em>
 									</p>
-									<h4 class="m0">Circ Supply</h4>
+									<h4 class="m0">Total Bid Orders</h4>
 									<span class="m-t-10"> <i
-										class="text-c-green f-16 fa fa-refresh"></i> Circulating
-										Supply
+										class="text-c-green f-16 fa fa-refresh"></i> Total Bids
+										
 									</span>
 								</div>
 							</div>
@@ -268,11 +268,11 @@
 							<div class="row row-table row-flush">
 								<div class="col-xs-12">
 									<p class="mb0">
-										40 Billions <em class="fa fa-money"></em>
+										40 <em class="fa fa-money"></em>
 									</p>
-									<h4 class="m0">Total Supply</h4>
+									<h4 class="m0">Total Sell Orders</h4>
 									<span class="f-left m-t-10"> <i class="fa fa-money"></i>
-										Total Supply
+										Total Sell Orders
 									</span>
 								</div>
 							</div>
@@ -306,7 +306,7 @@
 						<div class="panel-heading">
 							<div class="panel-title">Gainers / Losers</div>
 						</div>
-						<!--<jsp:include page="/gainloss" />-->
+						<jsp:include page="/gainloss" />
 					</div>
 					<!-- Coin Status Ends Here -->
 					<div class="panel panel-default">
@@ -362,7 +362,7 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Orders Book <a href="javascript:void(0);"
+					Order Blotter<a href="javascript:void(0);"
 						data-perform="panel-collapse" data-toggle="tooltip" title=""
 						class="pull-right" data-original-title="Collapse Panel"> <em
 						class="fa fa-minus"></em>
@@ -388,7 +388,7 @@
 		<div class="col-md-12" id="open_orders">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Open Orders <a href="#" data-perform="panel-collapse"
+					Open Orders <a href="#open_orders" data-perform="panel-collapse"
 						data-toggle="tooltip" title="Collapse Panel" class="pull-right">
 						<em class="fa fa-minus"></em>
 					</a>
@@ -402,7 +402,7 @@
 		<div class="col-md-12" id="market">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					Market History <a href="#" data-perform="panel-collapse"
+					Executed Market History <a href="#" data-perform="panel-collapse"
 						data-toggle="tooltip" title="Collapse Panel" class="pull-right">
 						<em class="fa fa-minus"></em>
 					</a>
@@ -416,75 +416,7 @@
 
 			</div>
 		</div>
-		<!-- My Order History -->
-		<div class="col-md-12" id="history">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					My Order History <a href="#" data-perform="panel-collapse"
-						data-toggle="tooltip" title="Collapse Panel" class="pull-right">
-						<em class="fa fa-minus"></em>
-					</a>
-				</div>
-				<div class="table-responsive">
-					<table class="table table-bordered table-hover">
-						<thead>
-							<tr>
-								<th>Closed Date</th>
-								<th>Opened Date</th>
-								<th>Type</th>
-								<th>Bid/Ask</th>
-								<th>Units Filled SC</th>
-								<th>Units Total SC</th>
-								<th>Actual Rate</th>
-								<th>Cost/Proceeds</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>01/29/2018 06:29:22 PM</td>
-								<td>01/29/2018 06:27:08 PM</td>
-								<td>Limit Sell</td>
-								<td>0.00000384</td>
-								<td>25953.89501312</td>
-								<td>25953.89501312</td>
-								<td>0.00000383</td>
-								<td>0.09941380</td>
-							</tr>
-							<tr>
-								<td>01/29/2018 06:29:22 PM</td>
-								<td>01/29/2018 06:27:08 PM</td>
-								<td>Limit Sell</td>
-								<td>0.00000384</td>
-								<td>25953.89501312</td>
-								<td>25953.89501312</td>
-								<td>0.00000383</td>
-								<td>0.09941380</td>
-							</tr>
-							<tr>
-								<td>01/29/2018 06:29:22 PM</td>
-								<td>01/29/2018 06:27:08 PM</td>
-								<td>Limit Buy</td>
-								<td>0.00000384</td>
-								<td>25953.89501312</td>
-								<td>25953.89501312</td>
-								<td>0.00000383</td>
-								<td>0.09941380</td>
-							</tr>
-							<tr>
-								<td>01/29/2018 06:29:22 PM</td>
-								<td>01/29/2018 06:27:08 PM</td>
-								<td>Limit Sell</td>
-								<td>0.00000384</td>
-								<td>25953.89501312</td>
-								<td>25953.89501312</td>
-								<td>0.00000383</td>
-								<td>0.09941380</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
+		
 	</div>
 	</section> </section> </section>
 	<script src="js/plugins/jquery.js"></script>
@@ -503,6 +435,7 @@
 	<script src="js/highcharts.js"></script>
 	<script src="js/exporting.js"></script>
 	<script src="js/plugins/dataTables.colVis.js"></script>
+	<script src="js/bootstable.js"></script>
 
 	<!--[if lt IE 8]><script src="js/excanvas.min.js"></script><![endif]-->
 	<script src="js/tradify.js"></script>
@@ -544,7 +477,7 @@
     var auto_refresh = setInterval(
     	    function()
     	    {
-    			$('#macroaxis_stock_ticker').fadeIn("slow");
+    			//$('#macroaxis_stock_ticker').fadeIn("slow");
     			$('#securitytable').load("http://localhost:8080/Cash-Equities-Master/markettable").fadeIn("slow");
     	    }, 5000);
     

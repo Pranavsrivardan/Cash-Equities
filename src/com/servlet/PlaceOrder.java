@@ -55,14 +55,15 @@ public class PlaceOrder extends HttpServlet {
 		inProgress.setPriceOfSecurity(new BigDecimal(priceOfSecurity));
 		inProgress.setQuantity(quantity);
 		inProgress.setSecurityCode(securityCode);
-		inProgress.setSecurityName(info.getSecurityName());
+		inProgress.setSecurityName(info.getSecurityName()+" LTD");
 		inProgress.setSecurityType(info.getSecurityType());
 		inProgress.setStatus(status);
 		inProgress.setTimeStamp(timestamp);
 		inProgress.setUserId(userId);
 		inProgress.setUserName(session.getAttribute("username").toString());
 		inProgress.setRemainingQuantity(quantity);
-		inProgress.setTotalPrice(new BigDecimal((Long.parseLong(priceOfSecurity)*quantity)+""));
+		//inProgress.setTotalPrice(new BigDecimal((Long.parseLong(priceOfSecurity)*quantity)+""));
+		inProgress.setTotalPrice(new BigDecimal(0.00));
 		inProgress.setTradeType(tradeType);
 		System.out.println("going to save");
 		

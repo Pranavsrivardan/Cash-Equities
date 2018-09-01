@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<table class="table table-bordered table-hover">
+
+<table class="table table-bordered table-hover" id="open_orders_table">
 	<thead>
 		<tr>
 			<th><i class="fa fa-plus"></i></th>
@@ -11,7 +12,7 @@
 			<th>Quantity</th>
 			<th>Total Cost</th>
 			<th>Status</th>
-			<th><i class="fa fa-times"></i></th>
+			<th>Options</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -24,11 +25,12 @@
 				<td class="tableSmallPad">${order.timeStamp}</td>
 				<td class="tableSmallPad">${order.tradeType}<br>${order.direction}</td>
 				<td class="tableSmallPad">${order.priceOfSecurity}</td>
-				<td class="tableSmallPad">${order.quantity}</td>
+				<td class="tableSmallPad" id="change">${order.quantity}</td>
 				<td class="tableSmallPad">${order.totalPrice}</td>
 				<td class="tableSmallPad">${order.status}</td>
-				<td><i class="fa fa-times btn btn-danger"></i></td>
 			</tr>
 		</c:forEach>
 	</tbody>
 </table>
+
+<script src="js/bootstable.js"></script>

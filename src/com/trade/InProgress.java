@@ -23,7 +23,7 @@ public class InProgress {
 		return remainingQuantity;
 	}
 	public void setRemainingQuantity(long remainingquantity) {
-		this.remainingQuantity -= remainingquantity;
+		this.remainingQuantity = remainingquantity;
 	}
 	public BigDecimal getTotalPrice() {
 		return totalPrice;
