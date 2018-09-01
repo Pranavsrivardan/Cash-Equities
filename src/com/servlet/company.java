@@ -41,6 +41,8 @@ public class company extends HttpServlet {
 		
 		ShareDetail shareDetail = shareDetailDAO.getStock(id);
 		
+		
+		//displays the quote and stock detail in the company page
 		request.setAttribute("shareDetails", shareDetail);
 		request.setAttribute("buylist", buylist);
 		request.setAttribute("selllist", selllist);

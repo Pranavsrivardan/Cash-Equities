@@ -24,6 +24,9 @@ public class Sellorders extends HttpServlet {
 		OrderCRUD ordercrud=new OrderCRUD();
 		List<InProgress> ordersList=ordercrud.getSellOrders();
 		request.setAttribute("ordersList", ordersList);
+		
+		//showing all the sell orders
+		
 		RequestDispatcher rd=request.getRequestDispatcher("/sellorders.jsp");
 		rd.include(request, response);
 	}

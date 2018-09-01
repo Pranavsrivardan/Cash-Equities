@@ -6,6 +6,9 @@ import java.sql.Timestamp;
 public class UserHistory {
 
 	long transactionId;
+	public UserHistory() {
+		super();
+	}
 	String userIdB;
 	long orderIdB;
 	String userIdS;

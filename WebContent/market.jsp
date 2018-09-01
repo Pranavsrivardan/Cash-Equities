@@ -138,9 +138,9 @@
 					class="fa fa-user"></em>
 			</a>
 				<ul class="dropdown-menu">
-					<li><a href="profile">Profile</a></li>
+					<li><a href="profile.jsp">Profile</a></li>
 					<li class="divider"></li>
-					<li><a href="login">Logout</a></li>
+					<li><a href="logout">Logout</a></li>
 				</ul></li>
 		</ul>
 	</div>
@@ -190,9 +190,7 @@
 				class="fa fa-file-text"></em> <span class="item-text">My
 					Order History</span>
 		</a></li>
-		<li><a title="Pages" href="#history"> <em class="fa fa-bell"></em>
-				<span class="item-text">Transaction status</span>
-		</a></li>
+		
 	</ul>
 	</nav> </aside> <section> <!--Scroll ticker --> <iframe
 		allowtransparency="true" id="macroaxis_stock_ticker"
@@ -399,7 +397,7 @@
 			</div>
 		</div>
 		<!-- Market History -->
-		<div class="col-md-12" id="market">
+		<div class="col-md-12" id="history">
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					Executed Market History <a href="#" data-perform="panel-collapse"

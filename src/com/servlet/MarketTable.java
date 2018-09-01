@@ -25,14 +25,14 @@ public class MarketTable extends HttpServlet {
 		
 		MarketCRUD marketcrud=new MarketCRUD();
 		List<ShareInfo> securityList=marketcrud.getShareInfo();
+		
+		//set details of stock list in the market table
 		request.setAttribute("securityList", securityList);
 		RequestDispatcher rd=request.getRequestDispatcher("/markettable.jsp");
 		rd.include(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);

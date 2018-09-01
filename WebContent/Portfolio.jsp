@@ -258,13 +258,7 @@
                      </a>
 
             </li>
-            <li>
-              <a title="Pages" href="market#history">
-                     <em class="fa fa-bell"></em>
-                     <span class="item-text">Transaction status</span>
-                     </a>
-
-            </li>
+           
         </ul>
       </nav>
     </aside>

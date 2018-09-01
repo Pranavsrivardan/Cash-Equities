@@ -26,6 +26,8 @@ public class IndividualOrder extends HttpServlet {
 		// TODO Auto-generated method stub
 		HttpSession session=request.getSession();
 		String userId=(String) session.getAttribute("userid");
+		
+		//get individual order list to show values in inprogress as not executed
 		OrderCRUD order=new OrderCRUD();
 		List<InProgress> indiOrderList=order.getIndividualOrderInfo(userId);	
 		request.setAttribute("ordersList", indiOrderList);

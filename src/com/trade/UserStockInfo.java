@@ -70,4 +70,10 @@ public class UserStockInfo {
 	public void setTotalPrice(BigDecimal totalPrice) {
 		this.totalPrice = totalPrice;
 	}
+
+	public void updateStockInfoTable(String userId2, String securityName2, String securityCode2, String securityType2,
+			long quantity, BigDecimal priceOfSecurity) {
+		// TODO Auto-generated method stub
+		
+	}
 }

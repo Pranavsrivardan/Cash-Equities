@@ -22,6 +22,8 @@ import com.trade.InProgress;
 
 public class PrioriryList {
 	
+	
+	//display the quote for buy stocks
 	public List buyTopFive(String securityCode) {
 		Configuration config = new Configuration().configure("hibernate.cfg.xml");  
     	SessionFactory factory = config.buildSessionFactory();  
@@ -30,6 +32,7 @@ public class PrioriryList {
         List ordersList = null;
 		
 		try {
+			
 			System.out.println(securityCode);
             transaction = session.beginTransaction();
            ordersList = session.createCriteria(InProgress.class)
@@ -60,6 +63,8 @@ public class PrioriryList {
 		return ordersList;
 	}
 
+	
+	//display the quote for top five stocks
 	public List sellTopFive(String securityCode) {
 		
 		Configuration config = new Configuration().configure("hibernate.cfg.xml");  
@@ -101,7 +106,7 @@ public class PrioriryList {
 		
 	}
 	
-	
+	//adding userid to buy list to not match buy and sell of same user
 	public List<InProgress> buy(String securityCode,String userId) {
 		Configuration config = new Configuration().configure("hibernate.cfg.xml");  
     	SessionFactory factory = config.buildSessionFactory();  
@@ -132,6 +137,8 @@ public class PrioriryList {
 		return InProgressList;
 	}
 
+	
+	//adding userid to sell list not match buy and sell of same user
 	public List<InProgress> sell(String securityCode,String userId) {
 		
 		Configuration config = new Configuration().configure("hibernate.cfg.xml");  

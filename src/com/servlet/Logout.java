@@ -21,6 +21,8 @@ public class Logout extends HttpServlet {
 		
 		System.out.println("logout");
 		HttpSession session=request.getSession();
+		
+		//sets userid and name to null when logout is done
 		session.setAttribute("userid", "");
 		session.setAttribute("username", "");
 		//return "index?type=logout";

@@ -115,6 +115,10 @@ public class OrderMatching {
 								new Timestamp(new Date().getTime()), current.getCurrency());
 
 						userHistoryDAO.addOrUpdate(transaction);
+						UserStockInfo userStockInfo=new UserStockInfo(current.getUserId(),current.getSecurityName(),current.getSecurityCode(),current.getSecurityType(), current.getQuantity(),current.getPriceOfSecurity());
+						//userStockInfoDAO.updateStockInfoTable
+						UserStockInfoDAO userStockInfoDAO=new UserStockInfoDAO();
+						userStockInfoDAO.addOrUpdate(userStockInfo);
 						//commited
 						return true;
 					}else {
@@ -182,6 +186,10 @@ public class OrderMatching {
 								new Timestamp(new Date().getTime()), current.getCurrency());
 
 						userHistoryDAO.addOrUpdate(transaction);
+						UserStockInfo userStockInfo=new UserStockInfo(current.getUserId(),current.getSecurityName(),current.getSecurityCode(),current.getSecurityType(), current.getQuantity(),current.getPriceOfSecurity());
+						//userStockInfoDAO.updateStockInfoTable
+						UserStockInfoDAO userStockInfoDAO=new UserStockInfoDAO();
+						userStockInfoDAO.addOrUpdate(userStockInfo);
 						//commited	
 					}
 				}
@@ -256,6 +264,11 @@ public class OrderMatching {
 								new Timestamp(new Date().getTime()), current.getCurrency());
 
 						userHistoryDAO.addOrUpdate(transaction);
+						
+						UserStockInfo userStockInfo=new UserStockInfo(current.getUserId(),current.getSecurityName(),current.getSecurityCode(),current.getSecurityType(), current.getQuantity(),current.getPriceOfSecurity());
+						//userStockInfoDAO.updateStockInfoTable
+						UserStockInfoDAO userStockInfoDAO=new UserStockInfoDAO();
+						userStockInfoDAO.addOrUpdate(userStockInfo);
 						//commited
 						
 						return true;
@@ -327,6 +340,11 @@ public class OrderMatching {
 								new Timestamp(new Date().getTime()), current.getCurrency());
 
 						userHistoryDAO.addOrUpdate(transaction);
+						
+						UserStockInfo userStockInfo=new UserStockInfo(current.getUserId(),current.getSecurityName(),current.getSecurityCode(),current.getSecurityType(), current.getQuantity(),current.getPriceOfSecurity());
+						//userStockInfoDAO.updateStockInfoTable
+						UserStockInfoDAO userStockInfoDAO=new UserStockInfoDAO();
+						userStockInfoDAO.addOrUpdate(userStockInfo);
 						//commited	
 					}
 				}

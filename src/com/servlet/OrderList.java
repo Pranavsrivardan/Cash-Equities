@@ -25,6 +25,8 @@ public class OrderList extends HttpServlet {
 		OrderCRUD ordercrud=new OrderCRUD();
 		List<InProgress> ordersList=ordercrud.getOrderInfo();
 		request.setAttribute("ordersList", ordersList);
+		
+		//set orders list to forward to market as order blotter
 		RequestDispatcher rd=request.getRequestDispatcher("/market.jsp");
 		rd.forward(request, response);
 	

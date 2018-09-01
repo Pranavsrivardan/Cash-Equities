@@ -56,8 +56,8 @@ public class WalletList extends HttpServlet {
 	
 		System.out.println(userDetail);
 
+		
 		session.setAttribute("availableBalance", userDetail.get(0).getWalletBalance());
-	//	request.setAttribute("availableBalance", userDetail.get(0).getWalletBalance());
 		
 
 		System.out.println("check"+request.getParameter("amount_deposit"));
@@ -73,6 +73,7 @@ public class WalletList extends HttpServlet {
 		
 		 
 		 userDetail.get(0).setWalletBalance(userDetail.get(0).getWalletBalance().add(netamount));
+		 session.setAttribute("availableBalance", userDetail.get(0).getWalletBalance());
 		 System.out.println(userDetail.get(0).getWalletBalance());
 		 userDetailDao.addOrUpdate(userDetail.get(0));
 		 
@@ -81,8 +82,8 @@ public class WalletList extends HttpServlet {
 		 WalletCRUD walletCrud=new WalletCRUD();
 		 walletCrud.addOrUpdate(w);
 		 
-		 List<Wallet> walletList1=walletCrud.getWalletInfo(userId);
-			request.setAttribute("walletList", walletList1);
+//		 List<Wallet> walletList1=walletCrud.getWalletInfo(userId);
+//			request.setAttribute("walletList", walletList1);
 		 
 		request.setAttribute("availableBalance", userDetail.get(0).getWalletBalance());
 //		response.setIntHeader("Refresh", 5);
@@ -107,10 +108,11 @@ public class WalletList extends HttpServlet {
 				 Wallet w =new Wallet(userDetail.get(0).getAccountNumber(),userDetail.get(0).getUserId(),userDetail.get(0).getFullName(),"withdraw",new Timestamp(new Date().getTime()),netamount);
 				 WalletCRUD walletCrud=new WalletCRUD();
 				 walletCrud.addOrUpdate(w);
-				 
-				 List<Wallet> walletList1=walletCrud.getWalletInfo(userId);
-					request.setAttribute("walletList", walletList1);
-				 request.setAttribute("availableBalance", userDetail.get(0).getWalletBalance());
+//				 
+//				 List<Wallet> walletList1=walletCrud.getWalletInfo(userId);
+//					request.setAttribute("walletList", walletList1);
+				 session.setAttribute("availableBalance", userDetail.get(0).getWalletBalance());
+	//			 request.setAttribute("availableBalance", userDetail.get(0).getWalletBalance());
 //					response.setIntHeader("Refresh", 5);
 				 RequestDispatcher rd1=request.getRequestDispatcher("/wallet.jsp");
 					rd1.forward(request, response);
@@ -123,4 +125,3 @@ public class WalletList extends HttpServlet {
 	}
 
 }
-

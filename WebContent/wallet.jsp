@@ -56,10 +56,12 @@
         $("#add_money").fadeIn(10, function() {
             $("#wallet_history").fadeOut(10, function() {
               $("#add").click(function() {
-            		 $("#success").fadeIn(10, function() {
+            	// $("#success").fadeIn(10, function() {  
                   $("#add_money").fadeOut(10, function() {
-                	  $("#deposit").fadeOut(10, function() {});
-                    });
+                	  $("#deposit").fadeOut(10, function() {
+                		  
+                	  });
+                   // });
                   });
                 });
             });
@@ -69,11 +71,11 @@
          $("#add_moneyw").fadeIn(10, function() {
            $("#wallet_history").fadeOut(10, function() {
                $("#add1").click(function() {
-            	  $("#successw").fadeIn(10,function(){
+            //	  $("#successw").fadeIn(10,function(){
                    $("#add_moneyw").fadeOut(10, function() {
                 	   $("#withdraw").fadeOut(10, function() {});
                    });
-                 });
+            //     });
                });
             });
          });
@@ -209,7 +211,7 @@
               <li><a href="profile">Profile</a>
               </li>
               <li class="divider"></li>
-              <li><a href="login">Logout</a>
+              <li><a href="logout">Logout</a>
               </li>
             </ul>
           </li>
@@ -271,13 +273,7 @@
                      </a>
 
             </li>
-            <li>
-              <a title="Pages" href="market#history">
-                     <em class="fa fa-bell"></em>
-                     <span class="item-text">Transaction status</span>
-                     </a>
-
-            </li>
+           
         </ul>
       </nav>
     </aside>
@@ -288,7 +284,7 @@
         <!-- Success message -->
       
    <div id="success" style="display:none;">
-  <form method="post" action="walletlist"> 
+  
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- dialog body -->
@@ -299,13 +295,13 @@
       <div class="modal-footer"><input type="Submit" value="OK" class="btn btn-primary"> </div>
     </div>
   </div>
-  </form>
+  
 </div>
         <!-- Success message close-->
 
         <!-- Success1 message -->
       <div id="successw" style="display:none;">
-  <form method="post" action="walletlist"> 
+  
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- dialog body -->
@@ -316,7 +312,7 @@
       <div class="modal-footer"><input type="Submit" value="OK" class="btn btn-primary"> </div>
     </div>
   </div>
-  </form>
+ 
 </div>
         <!-- Success1 message close-->
 
@@ -343,22 +339,14 @@
        <table class="table">
        <thead>
        <tr>
-       <th>TOTAL</th>
-       <th>IN ORDER</th>
+       
        <th>AVAILABLE</th>
        <th style="width:212px;"></th>
        </tr>
        </thead>
        <tbody>
        <tr>
-       <td style="font-size:16px;" class="ng-binding">
-       0.00
-       <span class="inrLabel">INR</span>
-       </td>
-       <td style="font-size:16px;" class="ng-binding">
-       0.00
-       <span class="inrLabel">INR</span>
-       </td>
+      
        <td style="font-size:16px;" class="ng-binding">
        ${availableBalance} 
        <span class="inrLabel">INR</span>
@@ -439,7 +427,7 @@
                 <!-- <h4 class="modal-title">ADD MONEY VIA <b class="abir_name">Credit Card</b></h4> -->
               </div>
 
-          <!--     <form method="post" action="walletlist">  -->
+               <form method="post" action="walletlist">  
                 <div class="modal-body">
                   <input class="form-control abir_id" type="hidden" name="id" value="4">
                   <div class="row">
@@ -468,10 +456,10 @@
                 </div>
                 <div class="modal-footer">
                   <button style="font-size:15px" type="button" class="btn btn-default" data-dismiss="modal" onclick="location.reload()">Close</button>
-                  <button style="font-size:15px" id="add" class="btn btn-primary">Submit</button>
+                  <input style="font-size:15px" id="add" class="btn btn-primary" type="submit">
                    <input type="hidden" name="type" value=""/>
                 </div>
-           <!--  </form> -->
+            </form> 
             </div>
           </div>
         </div>
@@ -485,7 +473,7 @@
                 <!-- <h4 class="modal-title">ADD MONEY VIA <b class="abir_name">Credit Card</b></h4> -->
               </div>
 
-          <!--  <form method="post" action="walletlist">  -->
+            <form method="post" action="walletlist"> 
                 <div class="modal-body">
                   <input class="form-control abir_id" type="hidden" name="id" value="4">
                   <div class="row">
@@ -514,7 +502,7 @@
                 </div>
                 <div class="modal-footer">
                   <button style="font-size:15px" type="button" class="btn btn-default" data-dismiss="modal" onclick="location.reload()">Close</button>
-                  <button style="font-size:15px" id="add1" class="btn btn-primary">Submit</button>
+                  <input style="font-size:15px" id="add1" class="btn btn-primary" type="submit">
                    <input type="hidden" name="type" value=""/>
                 </div>
             <!-- </form> -->

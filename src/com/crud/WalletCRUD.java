@@ -31,13 +31,7 @@ public class WalletCRUD {
 	
 	public List<Wallet> getWalletInfo(String userId) {
 		List<Wallet> walletinfo = null;
-//		int i=0;
-//		if(i==0) {
-//			Wallet wallet=new Wallet(1,"L001","Leo Messi","deposit",new Timestamp(new Date().getTime()),new BigDecimal(6000));
-//			addOrUpdate(wallet);
-//			i++;
-//			
-//		}
+
 		try {
 			walletinfo=session.createCriteria(Wallet.class)
 					.add(Restrictions.like("userId", userId))

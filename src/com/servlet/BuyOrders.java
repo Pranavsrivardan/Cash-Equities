@@ -13,29 +13,17 @@ import javax.servlet.http.HttpServletResponse;
 import com.crud.OrderCRUD;
 import com.trade.InProgress;
 
-/**
- * Servlet implementation class BuyOrders
- */
 @WebServlet("/buyorders")
 public class BuyOrders extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public BuyOrders() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+ 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
+		
 		OrderCRUD ordercrud=new OrderCRUD();
 		List<InProgress> ordersList=ordercrud.getBuyOrders();
+		
+		//setting orderlist to forward as the buy orders
 		request.setAttribute("ordersList", ordersList);
 		RequestDispatcher rd=request.getRequestDispatcher("/buyorders.jsp");
 		rd.include(request, response);

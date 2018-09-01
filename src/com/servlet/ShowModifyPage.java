@@ -12,9 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.crud.InProgressDAO;
 import com.trade.InProgress;
 
-/**
- * Servlet implementation class ShowModifyPage
- */
+
 @WebServlet("/ShowModifyPage")
 public class ShowModifyPage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -24,6 +22,8 @@ public class ShowModifyPage extends HttpServlet {
 		String orderId = request.getParameter("orderId");
 		InProgressDAO inProgressDAO = new InProgressDAO();
 		InProgress inProgress = inProgressDAO.getRow(Long.parseLong(orderId));
+		
+		//showing modified order in inProgress table
 		
 		request.setAttribute("modify", inProgress);
 		

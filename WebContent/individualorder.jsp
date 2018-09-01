@@ -12,7 +12,7 @@
 			<th>Quantity</th>
 			<th>Total Cost</th>
 			<th>Status</th>
-			<th>Options</th>
+			<th><i class="fa fa-times"></i></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -28,6 +28,7 @@
 				<td class="tableSmallPad" id="change">${order.quantity}</td>
 				<td class="tableSmallPad">${order.totalPrice}</td>
 				<td class="tableSmallPad">${order.status}</td>
+				<td><a href="Cancel?id=${order.orderId}"><i class="fa fa-times btn btn-danger"></i></a></td>
 			</tr>
 		</c:forEach>
 	</tbody>

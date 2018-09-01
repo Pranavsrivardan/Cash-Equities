@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,8 +16,10 @@ import javax.servlet.http.HttpSession;
 
 import com.trade.InProgress;
 import com.trade.ShareInfo;
+import com.trade.UserStockInfo;
 import com.crud.InProgressDAO;
 import com.crud.MarketCRUD;
+import com.crud.UserStockInfoDAO;
 import com.logic.OrderMatching;
 
 
@@ -34,18 +37,39 @@ public class PlaceOrder extends HttpServlet {
 		String userId = session.getAttribute("userid").toString();
 		
 		String securityCode = request.getParameter("securityCode");
-	
+		String direction = request.getParameter("direction");
 		long quantity = Long.parseLong(request.getParameter("quantity"));
 		String priceOfSecurity = request.getParameter("priceOfSecurity");
+//		UserStockInfoDAO userStockInfoDAO = new UserStockInfoDAO();
+//		List<UserStockInfo> info1 = userStockInfoDAO.getDetails(userId);
+//		boolean fl=false;
+//		if(direction.equals("sell")) {
+//		for(UserStockInfo temp: info1) {
+//			if((temp.getSecurityCode().equals(securityCode) && temp.getTotalQuantity()>=quantity)) {
+//				fl=true;
+//				System.out.println("u can");
+//			}
+//		}
+//		if(!fl) {
+//			session.setAttribute("messages", "not enough stocks available");
+//			System.out.println("u cant");
+//			response.sendRedirect("market");
+//		}
+//		}
+//			
+//			
+			
 		Timestamp timestamp = new Timestamp(new Date().getTime());
 		String currency = "INR";
-		String direction = request.getParameter("direction");
+		
 		String status = "Not Exe";
 		String tradeType = "Limit"; 
 				//request.getParameter("tradeType");
 		securityCode=request.getParameter("securityCode");
 		MarketCRUD marketCRUD = new MarketCRUD();
 		ShareInfo info = (ShareInfo) marketCRUD.getIndiShareInfo2(securityCode);
+		
+		//setting all the order details to place order
 		
 		
 		inProgress.setCurrency(currency);

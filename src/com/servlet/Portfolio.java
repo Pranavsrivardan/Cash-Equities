@@ -31,6 +31,8 @@ public class Portfolio extends HttpServlet {
 		
 		System.out.println("portpolio");
 		
+		//showing the completed transactions of user in history of portfolio
+		
 		request.setAttribute("history", userStockInfos);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("Portfolio.jsp");
 		dispatcher.forward(request, response);

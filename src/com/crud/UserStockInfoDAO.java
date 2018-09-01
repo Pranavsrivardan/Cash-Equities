@@ -1,5 +1,6 @@
 package com.crud;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -100,4 +101,5 @@ public class UserStockInfoDAO {
 		}
 		return details;
 	}
+
 }

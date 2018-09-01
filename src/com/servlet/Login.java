@@ -51,8 +51,10 @@ public class Login extends HttpServlet {
 					HttpSession session=request.getSession();
 					session.setAttribute("userid", loginDetails.getUserId());
 					session.setAttribute("username", loginDetails.getUserName());
-					RequestDispatcher dispatcher=request.getRequestDispatcher("market.jsp");
-					dispatcher.forward(request, response);
+//					RequestDispatcher dispatcher=request.getRequestDispatcher("market.jsp");
+//					dispatcher.forward(request, response);
+					
+					response.sendRedirect("market");
 				}else {
 					RequestDispatcher dispatcher=request.getRequestDispatcher("landing.jsp");
 					dispatcher.forward(request, response);

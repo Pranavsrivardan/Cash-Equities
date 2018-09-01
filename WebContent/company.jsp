@@ -168,7 +168,7 @@ tr:nth-child(even) {
           <li><a href="profile">Profile</a>
           </li>
           <li class="divider"></li>
-          <li><a href="login">Logout</a>
+          <li><a href="logout">Logout</a>
           </li>
         </ul>
       </li>
@@ -205,7 +205,7 @@ tr:nth-child(even) {
             </ul>
           </li>
           <li class="active">
-            <a href="markets" onclick="location.href='index.html'" title="index" data-toggle="collapse-next">
+            <a href="market" onclick="location.href='market'" title="index" data-toggle="collapse-next">
                         <em class="fa fa-home"></em>
                         <div class="label pull-right"><i class="fa fa-line-chart"></i></div>
                         <span class="item-text">Markets</span>
@@ -230,13 +230,7 @@ tr:nth-child(even) {
                      </a>
 
             </li>
-            <li>
-              <a title="Pages" href="market#history">
-                     <em class="fa fa-bell"></em>
-                     <span class="item-text">Transaction status</span>
-                     </a>
-
-            </li>
+           
         </ul>
       </nav>
     </aside>

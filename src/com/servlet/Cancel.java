@@ -24,6 +24,8 @@ public class Cancel extends HttpServlet {
 		
 		System.out.println(inProgressId);
 		
+		
+		//forwards to the cancel method
 		CancelAndModify cancelAndModify = new CancelAndModify();
 		cancelAndModify.cancel(inProgressId);
 		
